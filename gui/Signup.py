@@ -14,6 +14,7 @@ class Registration:
 
         font1 = ('Cooper Black', 30, "bold")
         font2 = ('Cordia New', 14)
+        font3 = ('Times New Roman', 25, "bold")
 
         # First frame
         frame1 = Frame(root, bg="#EFEFF4", height=650, width=600)
@@ -90,8 +91,8 @@ class Registration:
         frame2 = Frame(self.root, bg="#4CD964", height=650, width=600)
         frame2.place(x=775, y=100)
 
-        canvas = Canvas(frame2, height=646, width=600)
-        canvas.pack()
+        image = Canvas(frame2, height=646, width=600)
+        image.pack()
         self.root.image = ImageTk.PhotoImage(Image.open(
             "H:\College\Sem-2\pictures\City driver-cuate11.png"))
-        canvas.create_image(10, 10, anchor=NW, image=self.root.image)
+        image.create_image(10, 10, anchor=NW, image=self.root.image)
