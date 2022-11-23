@@ -1,5 +1,5 @@
 from tkinter import *
-import GUI.signup
+import frontend.signup
 
 
 class Signin:
@@ -53,7 +53,7 @@ class Signin:
         def signup():
             self.root.destroy()
             root = Tk()
-            obj = GUI.signup.Registration(root)
+            obj = frontend.signup.Registration(root)
             root.mainloop()
 
         btn_signup = Button(frame2, text="SIGN UP", font=font3,

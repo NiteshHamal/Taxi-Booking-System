@@ -1,6 +1,9 @@
 from tkinter import *
-from GUI import signin
+from frontend import signin
 from PIL import ImageTk, Image
+from middleware.customer import Customer
+from backend.customerManagement import Register
+from tkinter import messagebox
 
 
 class Registration:
@@ -24,53 +27,58 @@ class Registration:
             'Cooper Black', 30, "bold", UNDERLINE))
         signin_txt.place(x=200, y=50)
 
-        firstname_frame = LabelFrame(frame1, text="First Name")
-        firstname_frame.place(x=175, y=150)
+        fullname_frame = LabelFrame(frame1, text="Full Name")
+        fullname_frame.place(x=175, y=150)
 
-        firstname_txt = Entry(firstname_frame, text="",
-                              font=font2, relief=RAISED)
-        firstname_txt.pack()
-
-        lastname_frame = LabelFrame(frame1, text="Last Name")
-        lastname_frame.place(x=175, y=200)
-
-        lastname_txt = Entry(lastname_frame, text="",
+        fullname_txt = Entry(fullname_frame, text="",
                              font=font2, relief=RAISED)
-        lastname_txt.pack()
+        fullname_txt.pack()
 
         address_frame = LabelFrame(frame1, text="Address")
-        address_frame.place(x=175, y=250)
+        address_frame.place(x=175, y=200)
 
         address = Entry(address_frame, text="", font=font2, relief=RAISED)
         address.pack()
 
         email_frame = LabelFrame(frame1, text="Email")
-        email_frame.place(x=175, y=300)
+        email_frame.place(x=175, y=250)
 
         email = Entry(email_frame, text="", font=font2, relief=RAISED)
         email.pack()
 
-        phone_frame = LabelFrame(frame1, text="Phone Number")
-        phone_frame.place(x=175, y=350)
+        number_frame = LabelFrame(frame1, text="Phone Number")
+        number_frame.place(x=175, y=300)
 
-        phone = Entry(phone_frame, text="", font=font2, relief=RAISED)
-        phone.pack()
+        number = Entry(number_frame, text="", font=font2, relief=RAISED)
+        number.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
-        password_frame.place(x=175, y=400)
+        password_frame.place(x=175, y=350)
 
         password = Entry(password_frame, text="", font=font2, relief=RAISED)
         password.pack()
 
         payment_frame = LabelFrame(frame1, text="Payment Method")
-        payment_frame.place(x=175, y=450)
+        payment_frame.place(x=175, y=400)
 
         payment = Entry(payment_frame, text='', font=font2, relief=RAISED)
         payment.pack()
 
+        def saveInfo():
+            customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(
+            ), number=number.get(), password=password.get(), payment=payment.get(), status="Customer")
+            result = Register(customer)
+            if result == True:
+                msg1 = messagebox.showinfo(
+                    "Taxi Booking System", "Customer Registration Successful")
+
+            else:
+                msg2 = messagebox.showerror(
+                    "Taxi Booking System", "Error Occurred!")
+
         btn_signin = Button(frame1, text="Submit", font=font3,
-                            relief=GROOVE, command=input, bg="#4CD964", fg="#EFEFF4")
-        btn_signin.place(x=220, y=520)
+                            relief=GROOVE, command=saveInfo, bg="#4CD964", fg="#EFEFF4")
+        btn_signin.place(x=220, y=470)
 
         # making function for command
 

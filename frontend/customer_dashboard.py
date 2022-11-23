@@ -14,30 +14,26 @@ class Cus_Dashboard:
         font1 = ('Cooper Black', 30, "bold")
         font2 = ('Cordia New', 14)
 
-
         # First frame
         frame1 = Frame(root, bg="#4CD964", height=100)
         frame1.pack(side=TOP, fill=BOTH)
 
         title_txt = Label(frame1, text="Taxi Booking", font=(
             'Cooper Black', 30, "bold", UNDERLINE), bg="#4CD964")
-        title_txt.pack(anchor=CENTER, expand = 'yes', pady=15)
-
-
-
+        title_txt.pack(anchor=CENTER, expand='yes', pady=15)
 
         # Second Frame
         frame2 = Frame(root, height=760)
         frame2.pack(fill=BOTH, expand='yes')
 
         style = ttk.Style()
-        style.theme_create( "MyStyle", parent="alt", settings={
-        "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
-        "TNotebook.Tab": {"configure": {"padding": [20, 5] },}})
+        style.theme_create("MyStyle", parent="alt", settings={
+            "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
+            "TNotebook.Tab": {"configure": {"padding": [20, 5]}, }})
 
         style.theme_use("MyStyle")
 
-         # tab
+        # tab
         main_tab = ttk.Notebook(frame2)
         home = ttk.Frame(main_tab)
         history = ttk.Frame(main_tab)
@@ -62,23 +58,22 @@ class Cus_Dashboard:
         pickaddress_frame = LabelFrame(home_frame, text="PickUp Address")
         pickaddress_frame.place(x=150, y=150)
 
-        pickaddress = Entry (pickaddress_frame, text="", font=font2, relief=RAISED)
+        pickaddress = Entry(pickaddress_frame, text="",
+                            font=font2, relief=RAISED)
         pickaddress.pack()
 
         dropaddress_frame = LabelFrame(home_frame, text="Drop Address")
         dropaddress_frame.place(x=150, y=200)
 
-        dropaddress = Entry(dropaddress_frame, text="", font=font2, relief=RAISED)
+        dropaddress = Entry(dropaddress_frame, text="",
+                            font=font2, relief=RAISED)
         dropaddress.pack()
 
         date_frame = LabelFrame(home_frame, text="Pickup Date")
-        date_frame.place(x=150,y=250)
+        date_frame.place(x=150, y=250)
 
         pickupdate = DateEntry(date_frame, width=18, font=font2)
         pickupdate.pack()
-
-
-
 
 
 if __name__ == '__main__':
