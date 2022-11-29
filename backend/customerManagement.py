@@ -1,15 +1,14 @@
 import sys
-from backend import connection
+from backend.connection import connect
 
 
-def Register(customerInfo):
-    conn = None
+def register(customerInfo):
     sql = """INSERT INTO customer VALUES (%s,%s, %s, %s, %s, %s, %s, %s)"""
     values = (customerInfo.getCid(), customerInfo.getFullName(), customerInfo.getAddress(),
               customerInfo.getEmail(), customerInfo.getNumber(), customerInfo.getPassword(), customerInfo.getPayment(), customerInfo.getStatus())
     result = False
     try:
-        conn = connection.connect()
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(sql, values)
         conn.commit()
@@ -20,6 +19,5 @@ def Register(customerInfo):
         print("Error : ", sys.exc_info())
     finally:
         del sql
-        del conn
         return result
         return values

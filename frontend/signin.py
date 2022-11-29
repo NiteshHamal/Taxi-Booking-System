@@ -1,8 +1,14 @@
+import sys
 from tkinter import *
+from tkinter import messagebox
 import frontend.signup
+import frontend.customer_dashboard
+from backend.loginManagement import login
+from middleware.customer import Customer
 
 
 class Signin:
+
     def __init__(self, root):
         self.root = root
         self.root.title("SignIn")
@@ -11,9 +17,36 @@ class Signin:
         self.root.resizable(False, False)  # windows resizable false
         self.root.config(background="#CECED2")  # background color change
 
+        def signup():
+            self.root.destroy()
+            root = Tk()
+            obj = frontend.signup.Registration(root)
+            root.mainloop()
+
         font1 = ('Cooper Black', 30, "bold")
         font2 = ('Cordia New', 14)
         font3 = ('Times New Roman', 25, "bold")
+
+        def login720():
+            cus_login = Customer(email=email_txt.get(),
+                                 password=password11.get())
+            user = login(cus_login)
+
+            if (email_txt.get() == '') or (password11.get() == ''):
+                msg11 = messagebox.showwarning(
+                    "Taxi Booking System", "Please Enter Email and Password")
+
+            else:
+                if user == None:
+                    msg1 = messagebox.showerror(
+                        "Taxi Booking System", "Error: Wrong Username or Password")
+                else:
+                    msg2 = messagebox.showinfo(
+                        "Taxi Booking System", "Welcome {}".format(user[1]))
+                    self.root.destroy()
+                    root = Tk()
+                    frontend.customer_dashboard.Cus_Dashboard(root)
+                    root.mainloop()
 
         # First frame
         frame1 = Frame(root, bg="#EFEFF4", height=650, width=600)
@@ -31,11 +64,11 @@ class Signin:
         password_frame = LabelFrame(frame1, text="Password")
         password_frame.place(x=175, y=300)
 
-        password = Entry(password_frame, text="", font=font2, relief=RAISED)
-        password.pack()
+        password11 = Entry(password_frame, text="", font=font2, relief=RAISED)
+        password11.pack()
 
         btn_signin = Button(frame1, text="Submit", font=font3,
-                            relief=GROOVE, command=input, bg="#4CD964", fg="#EFEFF4")
+                            relief=GROOVE, command=login720, bg="#4CD964", fg="#EFEFF4")
         btn_signin.place(x=220, y=375)
 
         # Second Frame
@@ -49,12 +82,6 @@ class Signin:
         signup_txt = Label(
             frame2, text="Sign up here if you don't have account", bg="#4CD964", font=font2)
         signup_txt.place(x=125, y=300)
-
-        def signup():
-            self.root.destroy()
-            root = Tk()
-            obj = frontend.signup.Registration(root)
-            root.mainloop()
 
         btn_signup = Button(frame2, text="SIGN UP", font=font3,
                             relief=GROOVE, command=signup, bg="#EFEFF4")

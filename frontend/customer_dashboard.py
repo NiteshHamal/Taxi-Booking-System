@@ -75,8 +75,11 @@ class Cus_Dashboard:
         pickupdate = DateEntry(date_frame, width=18, font=font2)
         pickupdate.pack()
 
+        request = Button(home_frame, text='Request', font=font2, relief=RAISED)
+        request.place(x=150, y=320)
 
-if __name__ == '__main__':
-    root = Tk()
-    Cus_Dashboard(root)
-    root.mainloop()
+        clear = Button(home_frame, text='  Clear  ', font=font2, relief=RAISED)
+        clear.place(x=270, y=320)
+
+        cancel = Button(home_frame, text=' Cancel ', font=font2, relief=RAISED)
+        cancel.place(x=210, y=370)

@@ -2,7 +2,7 @@ from tkinter import *
 from frontend import signin
 from PIL import ImageTk, Image
 from middleware.customer import Customer
-from backend.customerManagement import Register
+from backend.customerManagement import register
 from tkinter import messagebox
 
 
@@ -67,7 +67,7 @@ class Registration:
         def saveInfo():
             customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(
             ), number=number.get(), password=password.get(), payment=payment.get(), status="Customer")
-            result = Register(customer)
+            result = register(customer)
             if result == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Customer Registration Successful")
@@ -105,8 +105,8 @@ class Registration:
         frame2 = Frame(self.root, bg="#4CD964", height=650, width=600)
         frame2.place(x=775, y=100)
 
-        image = Canvas(frame2, height=646, width=600)
-        image.pack()
+        taxi_image = Canvas(frame2, height=646, width=600)
+        taxi_image.pack()
         self.root.image = ImageTk.PhotoImage(Image.open(
             "H:\College\Sem-2\pictures\City driver-cuate11.png"))
-        image.create_image(10, 10, anchor=NW, image=self.root.image)
+        taxi_image.create_image(10, 10, anchor=NW, image=self.root.image)
