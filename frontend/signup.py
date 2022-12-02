@@ -65,8 +65,8 @@ class Registration:
         payment.pack()
 
         def saveInfo():
-            customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(
-            ), number=number.get(), password=password.get(), payment=payment.get(), status="Customer")
+            customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(),
+                                number=number.get(), password=password.get(), payment=payment.get())
             result = register(customer)
             if result == True:
                 msg1 = messagebox.showinfo(
@@ -108,5 +108,5 @@ class Registration:
         taxi_image = Canvas(frame2, height=646, width=600)
         taxi_image.pack()
         self.root.image = ImageTk.PhotoImage(Image.open(
-            "H:\College\Sem-2\pictures\City driver-cuate11.png"))
+            "H:\College\Sem-2\python assignment\Taxi Booking System\image\signup.png"))
         taxi_image.create_image(10, 10, anchor=NW, image=self.root.image)

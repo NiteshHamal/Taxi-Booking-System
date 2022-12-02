@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkcalendar import DateEntry
 
 
-class Cus_Dashboard:
+class CusDashboard:
     def __init__(self, root):
         self.root = root
         self.root.title("Customer Dashboard")
@@ -83,3 +83,9 @@ class Cus_Dashboard:
 
         cancel = Button(home_frame, text=' Cancel ', font=font2, relief=RAISED)
         cancel.place(x=210, y=370)
+
+
+if __name__ == '__main__':
+    root = Tk()
+    CusDashboard(root)
+    root.mainloop()

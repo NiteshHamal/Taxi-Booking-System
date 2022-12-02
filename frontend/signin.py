@@ -1,8 +1,7 @@
-import sys
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
-import frontend.customer_dashboard
+import frontend.customerDashboard
 from backend.loginManagement import login
 from middleware.customer import Customer
 
@@ -45,12 +44,11 @@ class Signin:
                         "Taxi Booking System", "Welcome {}".format(user[1]))
                     self.root.destroy()
                     root = Tk()
-                    frontend.customer_dashboard.Cus_Dashboard(root)
+                    frontend.customerDashboard.CusDashboard(root)
                     root.mainloop()
 
         # First frame
         frame1 = Frame(root, bg="#EFEFF4", height=650, width=600)
-        frame1.place(x=175, y=100)
 
         signin_txt = Label(frame1, text="Sign in", font=font1)
         signin_txt.place(x=200, y=160)
@@ -71,9 +69,10 @@ class Signin:
                             relief=GROOVE, command=login720, bg="#4CD964", fg="#EFEFF4")
         btn_signin.place(x=220, y=375)
 
+        frame1.place(x=175, y=100)
+
         # Second Frame
         frame2 = Frame(self.root, bg="#4CD964", height=650, width=600)
-        frame2.place(x=775, y=100)
 
         signup_lbl = Label(frame2, text="Sign UP", bg="#4CD964",
                            font=font1, fg="#EFEFF4")
@@ -86,3 +85,5 @@ class Signin:
         btn_signup = Button(frame2, text="SIGN UP", font=font3,
                             relief=GROOVE, command=signup, bg="#EFEFF4")
         btn_signup.place(x=200, y=350)
+
+        frame2.place(x=775, y=100)

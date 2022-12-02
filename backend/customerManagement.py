@@ -3,9 +3,9 @@ from backend.connection import connect
 
 
 def register(customerInfo):
-    sql = """INSERT INTO customer VALUES (%s,%s, %s, %s, %s, %s, %s, %s)"""
+    sql = """INSERT INTO customer VALUES (%s,%s, %s, %s, %s, %s, %s)"""
     values = (customerInfo.getCid(), customerInfo.getFullName(), customerInfo.getAddress(),
-              customerInfo.getEmail(), customerInfo.getNumber(), customerInfo.getPassword(), customerInfo.getPayment(), customerInfo.getStatus())
+              customerInfo.getEmail(), customerInfo.getNumber(), customerInfo.getPassword(), customerInfo.getPayment())
     result = False
     try:
         conn = connect()
@@ -18,6 +18,5 @@ def register(customerInfo):
     except:
         print("Error : ", sys.exc_info())
     finally:
-        del sql
+        del values, sql
         return result
-        return values

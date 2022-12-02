@@ -1,6 +1,6 @@
 class Customer():
     # init
-    def __init__(self, cid=0, fullname=None, address=None, email=None, number=0, password=None, payment=None, status=None):
+    def __init__(self, cid=0, fullname=None, address=None, email=None, number=0, password=None, payment=None):
         self.cid = cid
         self.fullname = fullname
         self.address = address
@@ -8,7 +8,6 @@ class Customer():
         self.number = number
         self.password = password
         self.payment = payment
-        self.status = status
 
     # Getters
     def getCid(self):
@@ -32,10 +31,8 @@ class Customer():
     def getPayment(self):
         return self.payment
 
-    def getStatus(self):
-        return self.status
-
     # Setter
+
     def setCid(self, cid):
         self.cid = cid
 
@@ -57,9 +54,7 @@ class Customer():
     def setPayment(self, payment):
         self.payment = payment
 
-    def setStatus(self, status):
-        self.status = status
-
     # str
+
     def __str__(self):
-        return "{}, {}, {}, {}, {}, {}, {}, {}".format(self.cid, self.fullname, self.address, self.email, self.number, self.password, self.payment, self.status)
+        return "{}, {}, {}, {}, {}, {}, {}".format(self.cid, self.fullname, self.address, self.email, self.number, self.password, self.payment)
