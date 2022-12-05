@@ -1,7 +1,5 @@
 import sys
-
 import mysql.connector
-import pymysql.cursors
 
 
 def connect():

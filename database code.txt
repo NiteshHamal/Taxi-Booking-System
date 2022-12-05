@@ -1,0 +1,1 @@
+create table booking(bookingid int(10) primary key auto_increment, pickup_address varchar(100) NOT NULL, drop_address varchar(100) NOT NULL, pickup_date varchar(100) NOT NULL, pickup_time varchar(100) NOT NULL, status varchar(100), cid int(10),FOREIGN KEY(cid) REFERENCES customer(cid), did int(10), FOREIGN KEY(did) REFERENCES driver(did));

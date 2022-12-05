@@ -1,9 +1,14 @@
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
-import frontend.customerDashboard
-from backend.loginManagement import login
+from frontend.customerDashboard import CusDashboard
+from frontend.adminDashboard import AdminDashboard
+from frontend.driverDashboard import DriverDashboard
+from backend.loginManagement import *
 from middleware.customer import Customer
+from middleware.driver import Driver
+from middleware.admin import Admin
+from middleware import Global
 
 
 class Signin:
@@ -31,21 +36,49 @@ class Signin:
                                  password=password11.get())
             user = login(cus_login)
 
+            dri_login = Driver(email=email_txt.get(),
+                               password=password11.get())
+            duser = dlogin(dri_login)
+
+            admin_login = Admin(email=email_txt.get(),
+                                password=password11.get())
+            auser = alogin(admin_login)
+
             if (email_txt.get() == '') or (password11.get() == ''):
                 msg11 = messagebox.showwarning(
                     "Taxi Booking System", "Please Enter Email and Password")
 
             else:
-                if user == None:
-                    msg1 = messagebox.showerror(
-                        "Taxi Booking System", "Error: Wrong Username or Password")
-                else:
-                    msg2 = messagebox.showinfo(
+                if user != None:
+                    msg1 = messagebox.showinfo(
                         "Taxi Booking System", "Welcome {}".format(user[1]))
+                    Global.currentUser = user
                     self.root.destroy()
                     root = Tk()
                     frontend.customerDashboard.CusDashboard(root)
                     root.mainloop()
+
+                elif duser != None:
+                    msg2 = messagebox.showinfo(
+                        "Taxi Booking System", "Welcome {}".format(duser[1]))
+                    Global.currentDriver = duser
+                    self.root.destroy()
+                    root = Tk()
+                    frontend.driverDashboard.DriverDashboard(root)
+                    root.mainloop()
+
+                elif auser != None:
+                    msg3 = messagebox.showinfo(
+                        "Taxi Booking System", "Welcome {}".format(auser[1]))
+                    Global.currentAdmin = auser
+                    self.root.destroy()
+                    root = Tk()
+                    frontend.adminDashboard.AdminDashboard(root)
+                    root.mainloop()
+
+                else:
+                    msg4 = messagebox.showerror(
+                        "Taxi Booking System", "Error: Wrong Username or Password")
 
         # First frame
         frame1 = Frame(root, bg="#EFEFF4", height=650, width=600)

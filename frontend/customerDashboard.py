@@ -1,6 +1,11 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
+from frontend import signin
+from middleware.booking import Booking
+from middleware import Global
+from backend.bookingManagement import insert
+from PIL import ImageTk, Image
 
 
 class CusDashboard:
@@ -11,78 +16,156 @@ class CusDashboard:
         self.root.state('zoomed')  # windows on zoomed / full-screen size
         self.root.config(background="#CECED2")  # background color change
 
-        font1 = ('Cooper Black', 30, "bold")
-        font2 = ('Cordia New', 14)
+        def change_home():  # function for home button
+            home_frame.pack(side=RIGHT, fill=BOTH, expand=TRUE)
+            history.pack_forget()
+            profile.pack_forget()
 
-        # First frame
-        frame1 = Frame(root, bg="#4CD964", height=100)
-        frame1.pack(side=TOP, fill=BOTH)
+        def change_history():  # function for history button
+            history.pack(side=RIGHT, fill=BOTH, expand=TRUE)
+            home_frame.pack_forget()
+            profile.pack_forget()
 
-        title_txt = Label(frame1, text="Taxi Booking", font=(
-            'Cooper Black', 30, "bold", UNDERLINE), bg="#4CD964")
-        title_txt.pack(anchor=CENTER, expand='yes', pady=15)
+        def change_profile():  # function for profile button
+            profile.pack(side=RIGHT, fill=BOTH, expand=TRUE)
+            history.pack_forget()
+            home_frame.pack_forget()
 
-        # Second Frame
-        frame2 = Frame(root, height=760)
-        frame2.pack(fill=BOTH, expand='yes')
+        heading_font = ('Cooper Black', 30, "bold", UNDERLINE)
+        text_font = ('Cordia New', 14)
+        nav_font = ('Times New Roman', 25, "bold")
 
-        style = ttk.Style()
-        style.theme_create("MyStyle", parent="alt", settings={
-            "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
-            "TNotebook.Tab": {"configure": {"padding": [20, 5]}, }})
+        # first frame / navbar
+        navbar = Frame(self.root, bg="#4CD964", width=350)
+        navbar.pack(side=LEFT, fill=BOTH)
 
-        style.theme_use("MyStyle")
+        # image
+        profile = ImageTk.PhotoImage(Image.open(
+            "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\profile.png"))
+        profile_label = Label(navbar, image=profile, bg="#4CD964")
+        profile_label.image = profile
+        profile_label.place(x=90, y=50)
 
-        # tab
-        main_tab = ttk.Notebook(frame2)
-        home = ttk.Frame(main_tab)
-        history = ttk.Frame(main_tab)
-        profile = ttk.Frame(main_tab)
+        # home button
+        home_btn = Button(navbar, text=" Home  ", command=change_home,
+                          font=nav_font, bg="#4CD964", relief=RIDGE)
+        home_btn.place(x=90, y=210)
 
-        # adding tab to main_tab
-        main_tab.add(home, text='Home')
-        main_tab.add(history, text='History')
-        main_tab.add(profile, text='Profile')
+        # history button
+        history_button = Button(navbar, text="History",
+                                command=change_history, font=nav_font, bg="#4CD964", relief=RIDGE)
+        history_button.place(x=90, y=300)
 
-        # main tab pack
-        main_tab.pack(side=TOP, fill=BOTH, expand=TRUE)
+        # profile button
+        profile_button = Button(navbar, text=" Profile ",
+                                command=change_profile, font=nav_font, bg="#4CD964", relief=RIDGE)
+        profile_button.place(x=90, y=390)
 
-        # home tab
-        home_frame = Frame(home)
-        home_frame.pack(fill=BOTH, expand=TRUE)
+        # function for logout
+        def logout720():
+            self.root.destroy()
+            root = Tk()
+            obj = signin.Signin(root)
+            root.mainloop()
 
-        # adding widgets in home tab
-        booking_txt = Label(home_frame, text="Booking", font=font1)
-        booking_txt.place(x=170, y=50)
+        # logout button with image
+        logout = ImageTk.PhotoImage(Image.open(
+            "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\logout.png"))
+        logout_btn = Button(navbar, command=logout720, image=logout, bg="#4CD964",
+                            relief=FLAT, activebackground="#4CD964")
+        logout_btn.image = logout
+        logout_btn.place(x=110, y=650)
+
+        # second frame
+        # home frame of admin
+        home_frame = Frame(self.root)
+        home_frame.pack(side=RIGHT, fill=BOTH, expand=TRUE)
+
+        # adding widgets in home frame
+        booking_txt = Label(home_frame, text="Booking", font=heading_font)
+        booking_txt.place(x=70, y=120)
 
         pickaddress_frame = LabelFrame(home_frame, text="PickUp Address")
-        pickaddress_frame.place(x=150, y=150)
+        pickaddress_frame.place(x=50, y=220)
 
         pickaddress = Entry(pickaddress_frame, text="",
-                            font=font2, relief=RAISED)
+                            font=text_font, relief=RAISED)
         pickaddress.pack()
 
         dropaddress_frame = LabelFrame(home_frame, text="Drop Address")
-        dropaddress_frame.place(x=150, y=200)
+        dropaddress_frame.place(x=50, y=270)
 
         dropaddress = Entry(dropaddress_frame, text="",
-                            font=font2, relief=RAISED)
+                            font=text_font, relief=RAISED)
         dropaddress.pack()
 
         date_frame = LabelFrame(home_frame, text="Pickup Date")
-        date_frame.place(x=150, y=250)
+        date_frame.place(x=50, y=320)
 
-        pickupdate = DateEntry(date_frame, width=18, font=font2)
+        pickupdate = DateEntry(date_frame, width=18, font=text_font)
         pickupdate.pack()
 
-        request = Button(home_frame, text='Request', font=font2, relief=RAISED)
-        request.place(x=150, y=320)
+        time_frame = LabelFrame(home_frame, text="Pickup Time")
+        time_frame.place(x=50, y=370)
 
-        clear = Button(home_frame, text='  Clear  ', font=font2, relief=RAISED)
-        clear.place(x=270, y=320)
+        pickuptime = Entry(time_frame, text="", font=text_font, relief=RAISED)
+        pickuptime.pack()
 
-        cancel = Button(home_frame, text=' Cancel ', font=font2, relief=RAISED)
-        cancel.place(x=210, y=370)
+        cid_txt = Entry(home_frame)
+        # cid_txt.insert(0, Global.currentUser[0])
+
+        # function for request booking by customer
+        def requestbooking():
+            requestbooking = Booking(bookingid='', pickup_address=pickaddress.get(), drop_address=dropaddress.get(
+            ), pickup_date=pickupdate.get(), pickup_time=pickuptime.get(), status="Pending", cid=cid_txt.get())
+            result = insert(requestbooking)
+            if result == True:
+                msg1 = messagebox.showinfo(
+                    "Taxi Booking System", "Booking Request Successful")
+
+            else:
+                msg2 = messagebox.showerror(
+                    "Taxi Booking System", "Error Occurred!")
+
+        request = Button(home_frame, text='Request',
+                         font=text_font, relief=RAISED, command=requestbooking)
+        request.place(x=60, y=430)
+
+        clear = Button(home_frame, text='  Clear  ',
+                       font=text_font, relief=RAISED)
+        clear.place(x=180, y=430)
+
+        cancel = Button(home_frame, text=' Cancel ',
+                        font=text_font, relief=RAISED)
+        cancel.place(x=120, y=480)
+
+        # # frame for table
+        # table_frame = Frame(home_frame)
+        # table_frame.pack()
+        #
+        # requested_table = ttk.Treeview(table_frame)
+        # requested_table['columns'] = ('bid', 'p_address','d_address','p_date','p_time','status')
+        # requested_table.column('#0', width=0, stretch=NO)
+        # requested_table.column('bid', width = 50, anchor=CENTER)
+        # requested_table.column('p_address', width = 100, anchor=CENTER)
+        # requested_table.column('d_address', width = 100, anchor=CENTER)
+        # requested_table.column('p_date', width = 100, anchor=CENTER)
+        # requested_table.column('p_time', width = 100, anchor=CENTER)
+        # requested_table.column('status', width = 100, anchor=CENTER)
+        #
+        # requested_table.heading('#0', text = '', anchor= CENTER)
+        # requested_table.heading('bid', text = 'Booking ID', anchor= CENTER)
+        # requested_table.heading('p_address', text = 'Pickup Address', anchor= CENTER)
+        # requested_table.heading('d_address', text = 'Drop Address', anchor= CENTER)
+        # requested_table.heading('p_date', text = 'Pickup Date', anchor= CENTER)
+        # requested_table.heading('p_time', text = 'Pickup Time', anchor= CENTER)
+        # requested_table.heading('status', text = 'Booking Status', anchor= CENTER)
+
+        # driver management frame
+        history = Frame(self.root, bg="black")
+
+        # customer management frame
+        profile = Frame(self.root, bg="blue")
 
 
 if __name__ == '__main__':

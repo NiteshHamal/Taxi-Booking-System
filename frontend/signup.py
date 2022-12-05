@@ -3,7 +3,7 @@ from frontend import signin
 from PIL import ImageTk, Image
 from middleware.customer import Customer
 from backend.customerManagement import register
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 
 class Registration:
@@ -61,7 +61,8 @@ class Registration:
         payment_frame = LabelFrame(frame1, text="Payment Method")
         payment_frame.place(x=175, y=400)
 
-        payment = Entry(payment_frame, text='', font=font2, relief=RAISED)
+        payment = ttk.Combobox(payment_frame, font=font2, width=18)
+        payment['values'] = ('Cash', 'Online')
         payment.pack()
 
         def saveInfo():
@@ -110,3 +111,9 @@ class Registration:
         self.root.image = ImageTk.PhotoImage(Image.open(
             "H:\College\Sem-2\python assignment\Taxi Booking System\image\signup.png"))
         taxi_image.create_image(10, 10, anchor=NW, image=self.root.image)
+
+
+if __name__ == '__main__':
+    root = Tk()
+    Registration(root)
+    root.mainloop()
