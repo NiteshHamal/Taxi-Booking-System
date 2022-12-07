@@ -20,12 +20,13 @@ def add(driverInfo):
         del values, sql
         return result
 
+
 def statusUpdate(updatestatus):
     sql = """UPDATE driver SET status=%s WHERE did = %s"""
     values = (updatestatus.getStatus(), updatestatus.getDid())
-    result= False
+    result = False
     try:
-        conn=connect()
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(sql, values)
         conn.commit()
@@ -38,15 +39,16 @@ def statusUpdate(updatestatus):
         del values, sql
         return result
 
+
 def searchDriver(did):
     sql = """SELECT * FROM driver WHERE did = %s"""
     values = (did,)
     driverinfo = None
     try:
-        conn= connect()
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(sql, values)
-        driverinfo=cursor.fetchone()
+        driverinfo = cursor.fetchone()
         cursor.close()
         conn.close()
     except:

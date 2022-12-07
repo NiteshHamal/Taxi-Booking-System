@@ -5,6 +5,7 @@ from middleware import Global
 from middleware.driver import Driver
 from backend.driverManagement import *
 
+
 class DriverDashboard:
 
     def __init__(self, root):
@@ -39,10 +40,11 @@ class DriverDashboard:
                 active.config(image=off)
                 # active_label.config(text="Inactive")
                 is_on = FALSE
-                driver = Driver(did= did_txt.get(), status="Inactive")
+                driver = Driver(did=did_txt.get(), status="Inactive")
                 result = statusUpdate(driver)
                 if result == True:
-                    active_label.config(text="{}, You are Inactive".format(Global.currentDriver[1]))
+                    active_label.config(
+                        text="{}, You are Inactive".format(Global.currentDriver[1]))
             else:
                 active.config(image=on)
                 # active_label.config(text="Active")
@@ -50,7 +52,8 @@ class DriverDashboard:
                 driver1 = Driver(did=did_txt.get(), status="Active")
                 result = statusUpdate(driver1)
                 if result == True:
-                    active_label.config(text="{}, You are Active". format(Global.currentDriver[1]))
+                    active_label.config(
+                        text="{}, You are Active". format(Global.currentDriver[1]))
 
         on = ImageTk.PhotoImage(Image.open(
             "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\on.png"))
@@ -87,17 +90,19 @@ class DriverDashboard:
         did_txt.insert(0, Global.currentDriver[0])
 
         def switch():
-            driverid=did_txt.get()
+            driverid = did_txt.get()
             driverInfo = searchDriver(driverid)
             print(driverInfo)
             if driverInfo != None:
                 if driverInfo[5] == 'Active':
                     active.config(image=on)
-                    active_label.config(text='{}, You are Active'.format(Global.currentDriver[1]))
+                    active_label.config(
+                        text='{}, You are Active'.format(Global.currentDriver[1]))
 
                 else:
                     active.config(image=off)
-                    active_label.config(text='{}, You are Inactive'.format(Global.currentDriver[1]))
+                    active_label.config(
+                        text='{}, You are Inactive'.format(Global.currentDriver[1]))
 
         switch()
 
