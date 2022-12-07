@@ -61,6 +61,6 @@ class Booking():
     def setDid(self, did):
         self.did = did
 
-    # str
+    # str********
     def __str__(self):
         return "{},{},{},{},{},{},{},{}", format(self.bookingid, self.pickup_address, self.drop_address, self.pickup_date, self.pickup_time, self.status, self.cid, self.did)
