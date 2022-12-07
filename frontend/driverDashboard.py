@@ -2,7 +2,8 @@ from tkinter import *
 from PIL import ImageTk, Image
 from frontend import signin
 from middleware import Global
-
+from middleware.driver import Driver
+from backend.driverManagement import *
 
 class DriverDashboard:
 
@@ -36,12 +37,20 @@ class DriverDashboard:
             # Check if it is on or off
             if is_on:
                 active.config(image=off)
-                active_label.config(text="Inactive")
+                # active_label.config(text="Inactive")
                 is_on = FALSE
+                driver = Driver(did= did_txt.get(), status="Inactive")
+                result = statusUpdate(driver)
+                if result == True:
+                    active_label.config(text="{}, You are Inactive".format(Global.currentDriver[1]))
             else:
                 active.config(image=on)
-                active_label.config(text="Active")
+                # active_label.config(text="Active")
                 is_on = TRUE
+                driver1 = Driver(did=did_txt.get(), status="Active")
+                result = statusUpdate(driver1)
+                if result == True:
+                    active_label.config(text="{}, You are Active". format(Global.currentDriver[1]))
 
         on = ImageTk.PhotoImage(Image.open(
             "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\on.png"))
@@ -52,9 +61,9 @@ class DriverDashboard:
         active.image = on
         active.place(x=110, y=300)
 
-        active_label = Label(right_bar, text=" Active ",
+        active_label = Label(right_bar, text='{}, You are Active'.format(Global.currentDriver[1]),
                              font=font1, bg="#4CD964")
-        active_label.place(x=125, y=390)
+        active_label.place(x=55, y=390)
 
         # function for logout
         def logout720():
@@ -75,7 +84,22 @@ class DriverDashboard:
         home_frame.pack(side=RIGHT, fill=BOTH, expand=TRUE)
 
         did_txt = Entry(home_frame)
-        # did_txt.insert(0, Global.currentUser[0])
+        did_txt.insert(0, Global.currentDriver[0])
+
+        def switch():
+            driverid=did_txt.get()
+            driverInfo = searchDriver(driverid)
+            print(driverInfo)
+            if driverInfo != None:
+                if driverInfo[5] == 'Active':
+                    active.config(image=on)
+                    active_label.config(text='{}, You are Active'.format(Global.currentDriver[1]))
+
+                else:
+                    active.config(image=off)
+                    active_label.config(text='{}, You are Inactive'.format(Global.currentDriver[1]))
+
+        switch()
 
 
 if __name__ == '__main__':

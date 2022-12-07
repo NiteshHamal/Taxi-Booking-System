@@ -187,7 +187,7 @@ class AdminDashboard:
         # function for add button to add driver
         def addDriver():
             driver = Driver(did='', fullname=dname_txt.get(), address=daddress_txt.get(
-            ), email=demail_txt.get(), licenseno=dlicenseno_txt.get(), password=dpassword_txt.get())
+            ), email=demail_txt.get(), licenseno=dlicenseno_txt.get(), password=dpassword_txt.get(), status="Active")
             result = add(driver)
             if result == True:
                 msg1 = messagebox.showinfo(
