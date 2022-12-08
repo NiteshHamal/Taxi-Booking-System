@@ -56,3 +56,20 @@ def searchDriver(did):
     finally:
         del values, sql
         return driverinfo
+
+
+def driverManage():
+    sql = """SELECT * FROM driver"""
+    drivertable = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        drivertable = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return drivertable

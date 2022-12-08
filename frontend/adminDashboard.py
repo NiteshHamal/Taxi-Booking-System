@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 from middleware.driver import Driver
 from backend.driverManagement import *
 from backend.customerManagement import *
+from backend.bookingManagement import *
 from middleware.customer import Customer
 from middleware import Global
 from frontend import signin
@@ -146,10 +147,47 @@ class AdminDashboard:
                              font=reg_font, relief=RAISED, bd=5)
         confirm_btn.place(x=980, y=240)
 
+        search_btn = Button(home_frame, text=' Search ',
+                            font=reg_font, relief=RAISED, bd=5)
+        search_btn.place(x=650, y=240)
+
         aid_txt = Entry(home_frame)
         # aid_txt.insert(0, Global.currentUser[0])
 
-        # driver management frame
+        #  adding request table in home_frame ----------------------------------------------------
+        requestTable = ttk.Treeview(home_frame, height=20)
+        requestTable['columns'] = (
+            'cid', 'fullname', 'paddress', 'daddress', 'pdate', 'ptime', 'status')
+        requestTable.column('#0', width=0, stretch=0)
+        requestTable.column('cid', width=50, anchor=CENTER)
+        requestTable.column('fullname', width=100, anchor=CENTER)
+        requestTable.column('paddress', width=100, anchor=CENTER)
+        requestTable.column('daddress', width=100, anchor=CENTER)
+        requestTable.column('pdate', width=100, anchor=CENTER)
+        requestTable.column('ptime', width=100, anchor=CENTER)
+        requestTable.column('status', width=100, anchor=CENTER)
+
+        requestTable.heading('#0', text='', anchor=CENTER)
+        requestTable.heading('cid', text='Customer ID', anchor=CENTER)
+        requestTable.heading('fullname', text='Fullname', anchor=CENTER)
+        requestTable.heading('paddress', text='Pickup Address', anchor=CENTER)
+        requestTable.heading('daddress', text='Drop Address', anchor=CENTER)
+        requestTable.heading('pdate', text='Pickup Date', anchor=CENTER)
+        requestTable.heading('ptime', text='Pickup Time', anchor=CENTER)
+        requestTable.heading('status', text='Booking Status', anchor=CENTER)
+
+        requestTable.pack(side=BOTTOM, fill=BOTH)
+
+        # function to show values in request table ------------------------------------------------
+        def requesttable():
+            request = requestBooking()
+            for row in request:
+                requestTable.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+
+        requesttable()
+
+        # driver management frame --------------------------------------------------------------------
         driver = Frame(self.root)
 
         #  adding widget on driver management frame or driver frame
@@ -184,7 +222,7 @@ class AdminDashboard:
         dpassword_txt = Entry(dpassword_frame, text='', font=reg_font)
         dpassword_txt.pack()
 
-        # function for add button to add driver
+        # function for add button to add driver ----------------------------------------------------
         def addDriver():
             driver = Driver(did='', fullname=dname_txt.get(), address=daddress_txt.get(
             ), email=demail_txt.get(), licenseno=dlicenseno_txt.get(), password=dpassword_txt.get(), status="Active")
@@ -196,17 +234,53 @@ class AdminDashboard:
                 msg2 = messagebox.showinfo(
                     "Taxi Booking System", "Error Occurred!")
 
-        add_btn = Button(driver, text='    ADD   ', font=reg_font,
-                         relief=RAISED, bd=5, command=addDriver)
-        add_btn.place(x=310, y=125)
+        dadd_btn = Button(driver, text='    ADD   ', font=reg_font,
+                          relief=RAISED, bd=5, command=addDriver)
+        dadd_btn.place(x=310, y=125)
 
-        update_btn = Button(driver, text='UPDATE',
-                            font=reg_font, relief=RAISED, bd=5)
-        update_btn.place(x=460, y=125)
+        dupdate_btn = Button(driver, text='UPDATE',
+                             font=reg_font, relief=RAISED, bd=5)
+        dupdate_btn.place(x=470, y=125)
 
-        delete_btn = Button(driver, text='DELETE',
-                            font=reg_font, relief=RAISED, bd=5)
-        delete_btn.place(x=620, y=125)
+        ddelete_btn = Button(driver, text='DELETE',
+                             font=reg_font, relief=RAISED, bd=5)
+        ddelete_btn.place(x=630, y=125)
+
+        dsearch_btn = Button(driver, text='SEARCH',
+                             font=reg_font, relief=RAISED, bd=5)
+        dsearch_btn.place(x=790, y=125)
+
+        # adding driver Info table in driver frame ------------------------------------------------
+        driverTable = ttk.Treeview(driver, height=25)
+        driverTable['columns'] = (
+            'did', 'fullname', 'address', 'email', 'licenseno', 'status', 'password')
+        driverTable.column('#0', width=0, stretch=0)
+        driverTable.column('did', width=50, anchor=CENTER)
+        driverTable.column('fullname', width=100, anchor=CENTER)
+        driverTable.column('address', width=100, anchor=CENTER)
+        driverTable.column('email', width=100, anchor=CENTER)
+        driverTable.column('licenseno', width=100, anchor=CENTER)
+        driverTable.column('status', width=100, anchor=CENTER)
+        driverTable.column('password', width=100, anchor=CENTER)
+
+        driverTable.heading('#0', text='', anchor=CENTER)
+        driverTable.heading('did', text='Driver ID', anchor=CENTER)
+        driverTable.heading('fullname', text='Fullname', anchor=CENTER)
+        driverTable.heading('address', text='Address', anchor=CENTER)
+        driverTable.heading('email', text='Email', anchor=CENTER)
+        driverTable.heading('licenseno', text='License No', anchor=CENTER)
+        driverTable.heading('status', text='Status', anchor=CENTER)
+        driverTable.heading('password', text='Password', anchor=CENTER)
+
+        driverTable.pack(side=BOTTOM, fill=BOTH)
+
+        # function to show values in driver Table -------------------------------------------------
+        def driverValue():
+            drivertable = driverManage()
+            for row in drivertable:
+                driverTable.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+        driverValue()
 
         # customer management frame
         customer = Frame(self.root)
@@ -264,15 +338,50 @@ class AdminDashboard:
 
         cadd_btn = Button(customer, text='    ADD   ', font=reg_font,
                           relief=RAISED, bd=5, command=addCustomer)
-        cadd_btn.place(x=610, y=125)
+        cadd_btn.place(x=590, y=125)
 
         cupdate_btn = Button(customer, text='UPDATE',
                              font=reg_font, relief=RAISED, bd=5)
-        cupdate_btn.place(x=770, y=125)
+        cupdate_btn.place(x=750, y=125)
 
         cdelete_btn = Button(customer, text='DELETE',
                              font=reg_font, relief=RAISED, bd=5)
-        cdelete_btn.place(x=930, y=125)
+        cdelete_btn.place(x=910, y=125)
+
+        csearch_btn = Button(customer, text='SEARCH',
+                             font=reg_font, relief=RAISED, bd=5)
+        csearch_btn.place(x=1070, y=125)
+
+        customerTable = ttk.Treeview(customer, height=25)
+        customerTable['columns'] = (
+            'cid', 'fullname', 'address', 'email', 'number', 'password', 'payment')
+        customerTable.column('#0', width=0, stretch=0)
+        customerTable.column('cid', width=50, anchor=CENTER)
+        customerTable.column('fullname', width=100, anchor=CENTER)
+        customerTable.column('address', width=100, anchor=CENTER)
+        customerTable.column('email', width=100, anchor=CENTER)
+        customerTable.column('number', width=100, anchor=CENTER)
+        customerTable.column('password', width=100, anchor=CENTER)
+        customerTable.column('payment', width=100, anchor=CENTER)
+
+        customerTable.heading('#0', text='', anchor=CENTER)
+        customerTable.heading('cid', text='Customer ID', anchor=CENTER)
+        customerTable.heading('fullname', text='Fullname', anchor=CENTER)
+        customerTable.heading('address', text='Address', anchor=CENTER)
+        customerTable.heading('email', text='Email', anchor=CENTER)
+        customerTable.heading('number', text='Phone No', anchor=CENTER)
+        customerTable.heading('password', text='Password', anchor=CENTER)
+        customerTable.heading('payment', text='Payment', anchor=CENTER)
+
+        customerTable.pack(side=BOTTOM, fill=BOTH)
+
+        # function to show values in customer Table -------------------------------------------------
+        def customerValue():
+            customertable = customerManage()
+            for row in customertable:
+                customerTable.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+        customerValue()
 
 
 if __name__ == '__main__':

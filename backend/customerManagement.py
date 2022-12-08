@@ -20,3 +20,37 @@ def register(customerInfo):
     finally:
         del values, sql
         return result
+
+
+def customerManage():
+    sql = """SELECT * FROM customer"""
+    customertable = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        customertable = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return customertable
+
+
+def test(name):
+    sql = """SELECT * FROM customer WHERE fullname LIKE '%{}%'""".format(name)
+    testname = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        testname = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return testname

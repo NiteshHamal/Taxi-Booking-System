@@ -21,3 +21,22 @@ def insert(bookingInfo):
     finally:
         del values, sql
         return result
+
+
+def requestBooking():
+    sql = """SELECT booking.cid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
+    booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
+    WHERE booking.status = 'Pending'"""
+    request = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        request = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return request
