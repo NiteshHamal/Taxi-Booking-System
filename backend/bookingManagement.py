@@ -1,4 +1,5 @@
 from backend.connection import connect
+from middleware.booking import Booking
 import sys
 
 
@@ -23,10 +24,82 @@ def insert(bookingInfo):
         return result
 
 
-def requestBooking():
-    sql = """SELECT booking.cid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
+def requestBooking(requestb):
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
     booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
-    WHERE booking.status = 'Pending'"""
+    WHERE booking.cid=%s booking.status = 'Pending' """
+    values=(requestb, )
+    request = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql,values)
+        request = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return request
+
+def requestSearch(name):
+    sql = """SELECT * FROM booking WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(name, name, name)
+    testname = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        testname = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return testname
+
+
+def cusdastable(book):
+    sql = """SELECT bookingid, pickup_address, drop_address, pickup_date, pickup_time FROM booking WHERE cid=%s AND status=%s """
+    values=(book.getCid(), book.getStatus())
+    cuspending=None
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        cursor.execute(sql, values)
+        cuspending= cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return cuspending
+
+def cancelreqBooking(bid):
+    sql = """DELETE FROM booking WHERE bookingid=%s"""
+    values=[bid,]
+    cancelreq=False
+    try:
+        conn =connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        cancelreq=True
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return cancelreq
+
+
+def requestBooking1167():
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
+    booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
+    WHERE  booking.status = 'Pending' """
     request = None
     try:
         conn = connect()
@@ -40,3 +113,26 @@ def requestBooking():
     finally:
         del sql
         return request
+
+
+def admin_update_booking(Info):
+    conn=None
+    sql="""UPDATE booking SET status=%s, did=%s WHERE bookingid=%s"""
+    values=(Info.getStatus(), Info.getDid(), Info.getBookingid())
+    updateResult=False
+
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        updateResult=True
+
+    except:
+        print("Error", sys.exc_info())
+
+    finally:
+        del values, sql, conn
+        return updateResult

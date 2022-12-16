@@ -1,5 +1,6 @@
 from backend.connection import connect
 import sys
+from middleware.driver import Driver
 
 
 def add(driverInfo):
@@ -73,3 +74,89 @@ def driverManage():
     finally:
         del sql
         return drivertable
+
+
+def driverSearch(name):
+    sql = """SELECT * FROM driver WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(name, name, name)
+    sdriver = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        sdriver = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return sdriver
+
+
+def editDri(driver):
+    sql = """ Update driver SET fullname=%s, address=%s, email=%s, licenseno=%s WHERE did=%s """
+    values = [driver.getFullname(), driver.getAddress(), driver.getEmail(), driver.getLicenseno(), driver.getDid()]
+    edriver = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        edriver = True
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return edriver
+
+
+def deleteDri(did):
+    sql = """DELETE FROM driver WHERE did = %s"""
+    values = [did.getDid()]
+    ddriver = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        ddriver = True
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return ddriver
+def drivertablead():
+    sql="""SELECT did, fullname, address  FROM driver WHERE status='Active'"""
+    driverad=None
+    try:
+        conn=connect()
+        cursor=conn.cursor()
+        cursor.execute(sql)
+        driverad=cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return driverad
+
+def upcoming_trip(cusname):
+    sql = """"""
+    request = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        request = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return request
