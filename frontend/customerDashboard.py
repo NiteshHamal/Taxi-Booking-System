@@ -2,12 +2,16 @@ from datetime import date
 from tkinter import *
 from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
+
+from backend.customerManagement import editCus
 from frontend import signin
 from middleware.booking import Booking
 from backend.bookingManagement import cusdastable, cancelreqBooking
 from middleware import Global
 from backend.bookingManagement import insert
 from PIL import ImageTk, Image
+
+from middleware.customer import Customer
 
 
 class CusDashboard:
@@ -48,6 +52,7 @@ class CusDashboard:
         # image
         profile = ImageTk.PhotoImage(Image.open(
             "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\profile.png"))
+
         profile_label = Label(navbar, image=profile, bg="#4CD964")
         profile_label.image = profile
         profile_label.place(x=90, y=50)
@@ -106,7 +111,7 @@ class CusDashboard:
         history_frame = Frame(self.root, bg="black")
 
         # customer management frame
-        profile_frame = Frame(self.root, bg="blue")
+        profile_frame = Frame(self.root)
 
         # adding widgets in home frame
         booking_txt = Label(home_frame, text="Booking", font=heading_font)
@@ -237,6 +242,69 @@ class CusDashboard:
             pickuptime.insert(0, requested_table.item(selectitem)['values'][4])
 
         requested_table.bind('<<TreeviewSelect>>', selectrequested_table)
+
+        # widgets on profile frame ----------------------------------------------------------------------
+
+        cus_fullname = LabelFrame(profile_frame, text= 'Fullname', font=text_font)
+        cus_fullname.place(x=300, y=100)
+
+        cus_fullname_txt = Entry(cus_fullname, font=text_font)
+        cus_fullname_txt.insert(0, Global.currentUser[1])
+        cus_fullname_txt.pack()
+
+        cus_address = LabelFrame(profile_frame, text='Address', font=text_font)
+        cus_address.place(x=300, y=190)
+
+        cus_address_txt= Entry(cus_address, font=text_font)
+        cus_address_txt.insert(0, Global.currentUser[2])
+        cus_address_txt.pack()
+
+        cus_email = LabelFrame(profile_frame, text="Email", font=text_font)
+        cus_email.place(x=300, y=280)
+
+        cus_email_txt = Entry(cus_email, font=text_font)
+        cus_email_txt.insert(0, Global.currentUser[3])
+        cus_email_txt.pack()
+
+        cus_number = LabelFrame(profile_frame, text="Phone Number", font=text_font)
+        cus_number.place(x=300, y=370)
+
+        cus_number_txt = Entry(cus_number, font=text_font)
+        cus_number_txt.insert(0, Global.currentUser[4])
+        cus_number_txt.pack()
+
+        cus_password = LabelFrame(profile_frame, text="Password", font=text_font)
+        cus_password.place(x=300, y=460)
+
+        cus_password_txt = Entry(cus_password, font=text_font)
+        cus_password_txt.insert(0, Global.currentUser[5])
+        cus_password_txt.pack()
+
+        cus_payment = LabelFrame(profile_frame, text='Payment Method', font=text_font)
+        cus_payment.place(x=300, y=550)
+
+        cus_payment_combo = ttk.Combobox(cus_payment, font=text_font, width=18)
+        cus_payment_combo['values'] = ('Cash', 'Online')
+        cus_payment_combo.insert(0, Global.currentUser[6])
+        cus_payment_combo.pack()
+
+        def editCustomer():
+            customer1 = Customer(fullname=cus_fullname_txt.get(), address=cus_address_txt.get(), email=cus_email_txt.get(),
+                                 number=cus_number_txt.get(), payment=cus_payment_combo.get(), cid=Global.currentUser[0])
+            ecustomer = editCus(customer1)
+            if ecustomer == True:
+                msg1 = messagebox.showinfo(
+                    "Taxi Booking System", "Customer Edit Successful")
+            else:
+                msg2 = messagebox.showerror(
+                    "Taxi Booking System", "Error Occurred!")
+
+        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED, bd=4, font=text_font, bg='#4CD964', command=editCustomer)
+        update_btn.place(x=800, y=370)
+
+
+
+
 
 
 if __name__ == '__main__':

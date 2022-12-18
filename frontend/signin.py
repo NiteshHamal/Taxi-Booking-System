@@ -18,7 +18,7 @@ class Signin:
         self.root.title("SignIn")
         self.root.geometry("550x500")  # size of the window
         self.root.state('zoomed')  # windows on zoomed / full-screen size
-        self.root.resizable(False, False)  # windows resizable false
+        # self.root.resizable(False, False)  # windows resizable false
         self.root.config(background="#CECED2")  # background color change
 
         def signup():
@@ -90,7 +90,7 @@ class Signin:
         email_frame.place(x=175, y=250)
 
         email_txt = Entry(email_frame, text="", font=font2, relief=RAISED)
-        email_txt.insert(0, 'nitesh0hamal@gmail.com')
+        email_txt.insert(0, 'salman@gmail.com')
         email_txt.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
@@ -98,7 +98,7 @@ class Signin:
 
         password11 = Entry(password_frame, text="",
                            font=font2, relief=RAISED, show='*')
-        password11.insert(0, 'niteshhamal')
+        password11.insert(0, 'salman')
         password11.pack()
 
         btn_signin = Button(frame1, text="Submit", font=font3,

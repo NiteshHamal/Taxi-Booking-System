@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 from PIL import ImageTk, Image
 from frontend import signin
@@ -251,7 +251,7 @@ class DriverDashboard:
         upcoming_trip_table.bind('<<TreeviewSelect>>', getData)
 
         # profile frame for driver
-        profile_frame = Frame(self.root, bg="black")
+        profile_frame = Frame(self.root)
 
         def switch():
             driverid = did_txt.get()
@@ -268,6 +268,58 @@ class DriverDashboard:
                         text='{}, You are Inactive'.format(Global.currentDriver[1]))
 
         switch()
+
+        # widgets on profile frame ----------------------------------------------------------------------
+
+        dri_fullname = LabelFrame(profile_frame, text= 'Fullname', font=font1)
+        dri_fullname.place(x=300, y=100)
+
+        dri_fullname_txt = Entry(dri_fullname, font=font1)
+        dri_fullname_txt.insert(0, Global.currentDriver[1])
+        dri_fullname_txt.pack()
+
+        dri_address = LabelFrame(profile_frame, text='Address', font=font1)
+        dri_address.place(x=300, y=190)
+
+        dri_address_txt= Entry(dri_address, font=font1)
+        dri_address_txt.insert(0, Global.currentDriver[2])
+        dri_address_txt.pack()
+
+        dri_email = LabelFrame(profile_frame, text="Email", font=font1)
+        dri_email.place(x=300, y=280)
+
+        dri_email_txt = Entry(dri_email, font=font1)
+        dri_email_txt.insert(0, Global.currentDriver[3])
+        dri_email_txt.pack()
+
+        dri_number = LabelFrame(profile_frame, text="Phone Number", font=font1)
+        dri_number.place(x=300, y=370)
+
+        dri_number_txt = Entry(dri_number, font=font1)
+        dri_number_txt.insert(0, Global.currentDriver[4])
+        dri_number_txt.pack()
+
+        dri_payment = LabelFrame(profile_frame, text='Payment Method', font=font1)
+        dri_payment.place(x=300, y=460)
+
+        dri_payment_combo = ttk.Combobox(dri_payment, font=font1, width=18)
+        dri_payment_combo['values'] = ('Cash', 'Online')
+        dri_payment_combo.insert(0, Global.currentDriver[6])
+        dri_payment_combo.pack()
+
+        # def editDriver():
+        #     driver1 = Driver(fullname=dname_txt.get(), address=daddress_txt.get(), email=demail_txt.get(),
+        #                      licenseno=dlicenseno_txt.get(),  did=did_txt.get())
+        #     edriver = editDri(driver1)
+        #     if edriver == True:
+        #         msg1 = messagebox.showinfo(
+        #             "Taxi Booking System", "Driver Edit Successful")
+        #     else:
+        #         msg2 = messagebox.showerror(
+        #             "Taxi Booking System", "Error Occurred!")
+
+        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED, bd=4, font=font1, bg='#4CD964', command=None)
+        update_btn.place(x=800, y=370)
 
 
 if __name__ == '__main__':

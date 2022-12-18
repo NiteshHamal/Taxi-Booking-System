@@ -119,7 +119,6 @@ def requestBooking1167():
 
 
 def admin_update_booking(Info):
-    conn = None
     sql = """UPDATE booking SET status=%s, did=%s WHERE bookingid=%s"""
     values = (Info.getStatus(), Info.getDid(), Info.getBookingid())
     updateResult = False
