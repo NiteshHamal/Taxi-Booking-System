@@ -14,7 +14,6 @@ from middleware import Global
 from frontend import signin
 
 
-
 class AdminDashboard:
 
     def __init__(self, root):
@@ -32,20 +31,20 @@ class AdminDashboard:
         style = ttk.Style()
         style.theme_use("default")
         style.configure("Treeview",
-        rowheight=25,
-        background="#f0f0f0",
-        fieldbackground="#f0f0f0",
-        bordercolor="#343638",
-        borderwidth=2,
-        font=('Times New Roman',14))
+                        rowheight=25,
+                        background="#f0f0f0",
+                        fieldbackground="#f0f0f0",
+                        bordercolor="#343638",
+                        borderwidth=2,
+                        font=('Times New Roman', 14))
 
         style.configure("Treeview.Heading",
-        background="#565b5e",
-        foreground="white",
-        relief="flat",
-        font=('Times New Roman', 14))
+                        background="#565b5e",
+                        foreground="white",
+                        relief="flat",
+                        font=('Times New Roman', 14))
         style.map("Treeview.Heading",
-        )
+                  )
 
         # first frame / navbar
         navbar = Frame(self.root, bg="#4CD964", width=350)
@@ -148,8 +147,6 @@ class AdminDashboard:
         time_txt = Entry(time_label, text='', font=reg_font)
         time_txt.pack()
 
-
-
         driver_label = LabelFrame(
             home_frame, text='Assign Driver', font=reg_font)
         driver_label.place(x=610, y=120)
@@ -158,21 +155,22 @@ class AdminDashboard:
         driver_txt.pack()
 
         def drivercheck():
-            app=tkinter.Toplevel()
+            app = tkinter.Toplevel()
             app.title("Check Driver")
             app.resizable(False, False)  # windows resizable false
             app.config(background="#CECED2")  # background color change
-            width=550
-            height=500
-            screenwidth=app.winfo_screenwidth()
-            screenheight=app.winfo_screenheight()
+            width = 550
+            height = 500
+            screenwidth = app.winfo_screenwidth()
+            screenheight = app.winfo_screenheight()
 
-            xCordinate=int((screenwidth/2)-(width/2))
-            yCordinate=int((screenheight/2)-(height/2))
+            xCordinate = int((screenwidth/2)-(width/2))
+            yCordinate = int((screenheight/2)-(height/2))
 
-            app.geometry('{}x{}+{}+{}'.format(width,height,xCordinate,yCordinate))
+            app.geometry('{}x{}+{}+{}'.format(width,
+                         height, xCordinate, yCordinate))
 
-            checktable=ttk.Treeview(app, height=25)
+            checktable = ttk.Treeview(app, height=25)
             checktable['columns'] = ('did', 'fullname', 'address')
             checktable.column('#0', width=0, stretch=0)
             checktable.column('did', width=100, anchor=CENTER)
@@ -186,48 +184,46 @@ class AdminDashboard:
             checktable.pack(fill=BOTH)
 
             def checkdriver():
-               driverad = drivertablead()
-               for row1 in driverad:
-                   checktable.insert(parent='', index='end', values=(row1[0], row1[1], row1[2]))
+                driverad = drivertablead()
+                for row1 in driverad:
+                    checktable.insert(parent='', index='end',
+                                      values=(row1[0], row1[1], row1[2]))
             checkdriver()
 
             def getselecteddriver(nitesh):
                 driver_txt.delete(0, END)
+                itemselect720 = checktable.selection()[0]
+                driver_txt.insert(0, checktable.item(
+                    itemselect720)['values'][0])
 
-                itemselect720=checktable.selection()[0]
+            checktable.bind('<<TreeviewSelect>>', getselecteddriver)
 
-                driver_txt.insert(0, checktable.item(itemselect720)['values'][0] )
-
-            checktable.bind('<<TreeviewSelect>>',getselecteddriver)
-
-        check_btn = Button(home_frame,command=drivercheck, text="Check Driver", font=reg_font, relief=RAISED, bd=5)
+        check_btn = Button(home_frame, command=drivercheck,
+                           text="Check Driver", font=reg_font, relief=RAISED, bd=5)
         check_btn.place(x=800, y=250)
 
         def confirm_booking():
 
-            if driver_txt.get()=='':
-                messagebox.showwarning("TBS","Please enter driver ID")
+            if driver_txt.get() == '':
+                messagebox.showwarning("TBS", "Please enter driver ID")
 
             else:
-                booking=Booking(bookingid=bid_txt.get(), did=driver_txt.get(), status='Booked')
-                updateResult=admin_update_booking(booking)
-                driver=Driver(did=driver_txt.get(), status="Inactive")
-                result=statusUpdate(driver)
+                booking = Booking(bookingid=bid_txt.get(),
+                                  did=driver_txt.get(), status='Confirmed')
+                updateResult = admin_update_booking(booking)
+                driver = Driver(did=driver_txt.get(), status="Inactive")
+                result = statusUpdate(driver)
                 driver_txt.delete(0, END)
-            if updateResult==True:
-                messagebox.showinfo("TBS","The booking is confirmed")
+            if updateResult == True:
+                messagebox.showinfo("TBS", "The booking is confirmed")
                 requestTable.delete(*requestTable.get_children())
                 requesttable()
 
             else:
-                messagebox.showerror("TBS","Error")
+                messagebox.showerror("TBS", "Error")
 
-
-
-
-
-
-        confirm_btn = Button(home_frame, text="Confirm Booking",command=confirm_booking, font=reg_font, relief=RAISED, bd=5)
+        confirm_btn = Button(home_frame, text="Confirm Booking",
+                             command=confirm_booking, font=reg_font, relief=RAISED, bd=5)
         confirm_btn.place(x=980, y=250)
 
         aid_txt = Entry(home_frame)
@@ -236,7 +232,7 @@ class AdminDashboard:
         #  adding request table in home_frame ----------------------------------------------------
         requestTable = ttk.Treeview(home_frame, height=18)
         requestTable['columns'] = (
-            'bid','cid', 'fullname', 'paddress', 'daddress', 'pdate', 'ptime', 'status')
+            'bid', 'cid', 'fullname', 'paddress', 'daddress', 'pdate', 'ptime', 'status')
         requestTable.column('#0', width=0, stretch=0)
         requestTable.column('bid', width=0, stretch=0)
         requestTable.column('cid', width=50, anchor=CENTER)
@@ -270,28 +266,24 @@ class AdminDashboard:
 
         def getbookingtabledata(a):
             bid_txt.delete(0, END)
-            name_txt.delete(0,END)
+            name_txt.delete(0, END)
             paddress_txt.delete(0, END)
             daddress_txt1.delete(0, END)
             date_txt.delete(0, END)
             time_txt.delete(0, END)
 
-
-            itemselect11=requestTable.selection()[0]
+            itemselect11 = requestTable.selection()[0]
 
             bid_txt.insert(0, requestTable.item(itemselect11)['values'][0])
             name_txt.insert(0, requestTable.item(itemselect11)['values'][2])
-            paddress_txt.insert(0, requestTable.item(itemselect11)['values'][3])
-            daddress_txt1.insert(0, requestTable.item(itemselect11)['values'][4])
+            paddress_txt.insert(0, requestTable.item(
+                itemselect11)['values'][3])
+            daddress_txt1.insert(
+                0, requestTable.item(itemselect11)['values'][4])
             date_txt.insert(0, requestTable.item(itemselect11)['values'][5])
             time_txt.insert(0, requestTable.item(itemselect11)['values'][6])
 
-
-        requestTable.bind('<<TreeviewSelect>>',getbookingtabledata)
-
-
-
-
+        requestTable.bind('<<TreeviewSelect>>', getbookingtabledata)
 
         # driver management frame --------------------------------------------------------------------
         driver = Frame(self.root)
@@ -336,8 +328,8 @@ class AdminDashboard:
 
         did_txt = Entry(driver)
 
-
         # function for add button to add driver ----------------------------------------------------
+
         def addDriver():
             driver = Driver(did='', fullname=dname_txt.get(), address=daddress_txt.get(
             ), email=demail_txt.get(), licenseno=dlicenseno_txt.get(), password=dpassword_txt.get(), status="Active")
@@ -356,9 +348,9 @@ class AdminDashboard:
         dadd_btn.place(x=310, y=125)
 
         def editDriver():
-            driver1=Driver(fullname=dname_txt.get(), address=daddress_txt.get(), email=demail_txt.get(),
-                                licenseno=dlicenseno_txt.get(),  did=did_txt.get())
-            edriver= editDri(driver1)
+            driver1 = Driver(fullname=dname_txt.get(), address=daddress_txt.get(), email=demail_txt.get(),
+                             licenseno=dlicenseno_txt.get(),  did=did_txt.get())
+            edriver = editDri(driver1)
             if edriver == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Driver Edit Successful")
@@ -374,7 +366,7 @@ class AdminDashboard:
 
         def deleteDriver():
             driver2 = Driver(did=did_txt.get())
-            ddriver=deleteDri(driver2)
+            ddriver = deleteDri(driver2)
             if ddriver == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Driver Delete Successful")
@@ -393,7 +385,8 @@ class AdminDashboard:
             drivertest = dsearch_txt.get()
             sdriver = driverSearch(drivertest)
             for row in sdriver:
-                    driverTable.insert(parent='', index='end', values=( row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+                driverTable.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
 
         dsearch_btn = Button(driver, text='SEARCH',
                              font=reg_font, relief=RAISED, bd=5, command=searchDri)
@@ -413,7 +406,8 @@ class AdminDashboard:
 
         # adding driver Info table in driver frame ------------------------------------------------
         driverTable = ttk.Treeview(driver, height=18)
-        driverTable['columns'] = ('did', 'fullname', 'address', 'email', 'licenseno', 'status')
+        driverTable['columns'] = (
+            'did', 'fullname', 'address', 'email', 'licenseno', 'status')
         driverTable.column('#0', width=0, stretch=0)
         driverTable.column('did', width=50, anchor=CENTER)
         driverTable.column('fullname', width=100, anchor=CENTER)
@@ -452,7 +446,8 @@ class AdminDashboard:
             dname_txt.insert(0, driverTable.item(selectitem1)['values'][1])
             daddress_txt.insert(0, driverTable.item(selectitem1)['values'][2])
             demail_txt.insert(0, driverTable.item(selectitem1)['values'][3])
-            dlicenseno_txt.insert(0, driverTable.item(selectitem1)['values'][4])
+            dlicenseno_txt.insert(
+                0, driverTable.item(selectitem1)['values'][4])
 
         driverTable.bind('<<TreeviewSelect>>', selectdriverTable)
 
@@ -498,13 +493,14 @@ class AdminDashboard:
         cpayment['values'] = ('Cash', 'Online')
         cpayment.pack()
 
-        searchcuslbl = LabelFrame(customer, text='Search Customer', font=reg_font)
+        searchcuslbl = LabelFrame(
+            customer, text='Search Customer', font=reg_font)
         searchcuslbl.place(x=10, y=240)
 
         searchcustxt = Entry(searchcuslbl, text='', font=reg_font)
         searchcustxt.pack()
 
-        cid_txt= Entry(customer, text='')
+        cid_txt = Entry(customer, text='')
 
         def addCustomer():
             customer = Customer(fullname=cname_txt.get(), address=caddress_txt.get(), email=cemail_txt.get(),
@@ -525,9 +521,9 @@ class AdminDashboard:
         cadd_btn.place(x=590, y=125)
 
         def editCustomer():
-            customer1=Customer(fullname=cname_txt.get(), address=caddress_txt.get(), email=cemail_txt.get(),
-                                number=cphoneno_txt.get(), payment=cpayment.get(), cid=cid_txt.get())
-            ecustomer= editCus(customer1)
+            customer1 = Customer(fullname=cname_txt.get(), address=caddress_txt.get(), email=cemail_txt.get(),
+                                 number=cphoneno_txt.get(), payment=cpayment.get(), cid=cid_txt.get())
+            ecustomer = editCus(customer1)
             if ecustomer == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Customer Edit Successful")
@@ -542,8 +538,8 @@ class AdminDashboard:
         cupdate_btn.place(x=750, y=125)
 
         def deleteCustomer():
-            customer2=Customer(cid=cid_txt.get())
-            dcustomer=deleteCus(customer2)
+            customer2 = Customer(cid=cid_txt.get())
+            dcustomer = deleteCus(customer2)
             if dcustomer == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Customer Delete Successful")
@@ -594,7 +590,8 @@ class AdminDashboard:
         def customerValue():
             customertable = customerManage()
             for row in customertable:
-                customerTable.insert(parent='', index='end', values=(row[0], row[1], row[2],row[3], row[4],row[5]))
+                customerTable.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4], row[5]))
         customerValue()
 
         def selectcustomertable(a):
@@ -606,7 +603,7 @@ class AdminDashboard:
             cpassword_txt.delete(0, END)
             cpayment.delete(0, END)
 
-            selectitem=customerTable.selection()[0]
+            selectitem = customerTable.selection()[0]
             cid_txt.insert(0, customerTable.item(selectitem)['values'][0])
             cname_txt.insert(0, customerTable.item(selectitem)['values'][1])
             caddress_txt.insert(0, customerTable.item(selectitem)['values'][2])

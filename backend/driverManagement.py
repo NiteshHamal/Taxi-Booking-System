@@ -77,7 +77,8 @@ def driverManage():
 
 
 def driverSearch(name):
-    sql = """SELECT * FROM driver WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(name, name, name)
+    sql = """SELECT * FROM driver WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(
+        name, name, name)
     sdriver = None
     try:
         conn = connect()
@@ -95,7 +96,8 @@ def driverSearch(name):
 
 def editDri(driver):
     sql = """ Update driver SET fullname=%s, address=%s, email=%s, licenseno=%s WHERE did=%s """
-    values = [driver.getFullname(), driver.getAddress(), driver.getEmail(), driver.getLicenseno(), driver.getDid()]
+    values = [driver.getFullname(), driver.getAddress(), driver.getEmail(),
+              driver.getLicenseno(), driver.getDid()]
     edriver = False
     try:
         conn = connect()
@@ -129,14 +131,16 @@ def deleteDri(did):
     finally:
         del values, sql
         return ddriver
+
+
 def drivertablead():
-    sql="""SELECT did, fullname, address  FROM driver WHERE status='Active'"""
-    driverad=None
+    sql = """SELECT did, fullname, address  FROM driver WHERE status='Active'"""
+    driverad = None
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql)
-        driverad=cursor.fetchall()
+        driverad = cursor.fetchall()
         cursor.close()
         conn.close()
     except:
@@ -144,6 +148,7 @@ def drivertablead():
     finally:
         del sql
         return driverad
+
 
 def upcoming_trip(cusname):
     sql = """"""
@@ -160,3 +165,43 @@ def upcoming_trip(cusname):
     finally:
         del sql
         return request
+
+
+def driver_booking_table():
+    conn = None
+    sql = """select booking.bookingid, customer.fullname, customer.number, booking.pickup_address, 
+    booking.drop_address, booking.pickup_date, booking.pickup_time, booking.status from booking 
+    left join customer on booking.cid = customer.cid where not booking.status='Pending' order by booking.status desc"""
+    result = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+    except:
+        print("Error", sys.exc_info())
+
+    finally:
+        del sql, conn
+        return result
+
+# def driver_update_booking(didInfo):
+#     sql = """UPDATE driver SET status=%s WHERE did = %s"""
+#     values = (didInfo.getStatus(), didInfo.getDid())
+#     result = False
+#     try:
+#         conn = connect()
+#         cursor = conn.cursor()
+#         cursor.execute(sql, values)
+#         conn.commit()
+#         cursor.close()
+#         conn.close()
+#         result = True
+#     except:
+#         print("Error : ", sys.exc_info())
+#     finally:
+#         del values, sql
+#         return result

@@ -1,9 +1,10 @@
+from datetime import date
 from tkinter import *
 from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
 from frontend import signin
 from middleware.booking import Booking
-from backend.bookingManagement import cusdastable,cancelreqBooking
+from backend.bookingManagement import cusdastable, cancelreqBooking
 from middleware import Global
 from backend.bookingManagement import insert
 from PIL import ImageTk, Image
@@ -29,21 +30,20 @@ class CusDashboard:
         style = ttk.Style()
         style.theme_use("default")
         style.configure("Treeview",
-        rowheight=25,
-        background="#f0f0f0",
-        fieldbackground="#f0f0f0",
-        bordercolor="#343638",
-        borderwidth=2,
-        font=('Times New Roman',14))
-
+                        rowheight=25,
+                        background="#f0f0f0",
+                        fieldbackground="#f0f0f0",
+                        bordercolor="#343638",
+                        borderwidth=2,
+                        font=('Times New Roman', 14))
 
         style.configure("Treeview.Heading",
-        background="#565b5e",
-        foreground="white",
-        relief="flat",
-        font=('Times New Roman', 14))
+                        background="#565b5e",
+                        foreground="white",
+                        relief="flat",
+                        font=('Times New Roman', 14))
         style.map("Treeview.Heading",
-        )
+                  )
 
         # image
         profile = ImageTk.PhotoImage(Image.open(
@@ -129,7 +129,9 @@ class CusDashboard:
         date_frame = LabelFrame(home_frame, text="Pickup Date")
         date_frame.place(x=50, y=320)
 
-        pickupdate = DateEntry(date_frame, width=18, font=text_font)
+        todaydate = date.today()
+        pickupdate = DateEntry(date_frame, width=18,
+                               font=text_font, mindate=todaydate)
         pickupdate.pack()
 
         time_frame = LabelFrame(home_frame, text="Pickup Time")
@@ -139,10 +141,10 @@ class CusDashboard:
         pickuptime.pack()
 
         cid_txt = Entry(home_frame)
-        cid_txt.insert(0, Global.currentUser[0])  # ----------------------------------------------------------------------------------------------
+        # ----------------------------------------------------------------------------------------------
+        cid_txt.insert(0, Global.currentUser[0])
 
         bid_txt = Entry(home_frame)
-
 
         # function for request booking by customer
         def requestbooking():
@@ -150,7 +152,8 @@ class CusDashboard:
             ), pickup_date=pickupdate.get(), pickup_time=pickuptime.get(), status="Pending", cid=cid_txt.get())
             result = insert(requestbooking)
             if result == True:
-                msg1 = messagebox.showinfo("Taxi Booking System", "Booking Request Successful")
+                msg1 = messagebox.showinfo(
+                    "Taxi Booking System", "Booking Request Successful")
                 requested_table.delete(*requested_table.get_children())
                 cusdas()
 
@@ -164,9 +167,9 @@ class CusDashboard:
 
         def clearfun():
             pickaddress.delete(0, END)
-            dropaddress.delete(0,END)
+            dropaddress.delete(0, END)
             pickupdate.delete(0, END)
-            pickuptime.delete(0,END)
+            pickuptime.delete(0, END)
             bid_txt.delete(0, END)
 
         clear = Button(home_frame, text='  Clear  ',
@@ -174,7 +177,7 @@ class CusDashboard:
         clear.place(x=180, y=430)
 
         def cancelfun():
-            cancelreq= cancelreqBooking(bid_txt.get())
+            cancelreq = cancelreqBooking(bid_txt.get())
             if cancelreq == True:
                 msg1 = messagebox.showinfo(
                     "Taxi Booking System", "Booking Cancelled Successful")
@@ -188,42 +191,48 @@ class CusDashboard:
                         font=text_font, relief=RAISED, command=cancelfun)
         cancel.place(x=120, y=480)
 
-        requested_table = ttk.Treeview(home_frame )
-        requested_table['columns'] = ('bid','p_address','d_address','p_date','p_time')
+        requested_table = ttk.Treeview(home_frame)
+        requested_table['columns'] = (
+            'bid', 'p_address', 'd_address', 'p_date', 'p_time')
         requested_table.column('#0', width=0, stretch=NO)
-        requested_table.column('bid',width=0, stretch=NO)
-        requested_table.column('p_address', width = 200, anchor=CENTER)
-        requested_table.column('d_address', width = 200, anchor=CENTER)
-        requested_table.column('p_date', width = 200, anchor=CENTER)
-        requested_table.column('p_time', width = 200, anchor=CENTER)
+        requested_table.column('bid', width=0, stretch=NO)
+        requested_table.column('p_address', width=200, anchor=CENTER)
+        requested_table.column('d_address', width=200, anchor=CENTER)
+        requested_table.column('p_date', width=200, anchor=CENTER)
+        requested_table.column('p_time', width=200, anchor=CENTER)
 
-        requested_table.heading('#0', text = '', anchor= CENTER)
+        requested_table.heading('#0', text='', anchor=CENTER)
         requested_table.heading('bid', text='', anchor=CENTER)
-        requested_table.heading('p_address', text = 'Pickup Address', anchor= CENTER)
-        requested_table.heading('d_address', text = 'Drop Address', anchor= CENTER)
-        requested_table.heading('p_date', text = 'Pickup Date', anchor= CENTER)
-        requested_table.heading('p_time', text = 'Pickup Time', anchor= CENTER)
+        requested_table.heading(
+            'p_address', text='Pickup Address', anchor=CENTER)
+        requested_table.heading(
+            'd_address', text='Drop Address', anchor=CENTER)
+        requested_table.heading('p_date', text='Pickup Date', anchor=CENTER)
+        requested_table.heading('p_time', text='Pickup Time', anchor=CENTER)
         requested_table.pack(side=RIGHT, fill=BOTH)
 
         def cusdas():
-            cusbook= Booking(cid=cid_txt.get(), status='Pending')
+            cusbook = Booking(cid=cid_txt.get(), status='Pending')
             cuspending = cusdastable(cusbook)
             for row in cuspending:
-                requested_table.insert(parent='', index='end', values=(row[0], row[1], row[2], row[3], row[4]))
+                requested_table.insert(parent='', index='end', values=(
+                    row[0], row[1], row[2], row[3], row[4]))
         cusdas()
 
        # function to get selected item values from table
         def selectrequested_table(a):
             bid_txt.delete(0, END)
             pickaddress.delete(0, END)
-            dropaddress.delete(0,END)
+            dropaddress.delete(0, END)
             pickupdate.delete(0, END)
-            pickuptime.delete(0,END)
+            pickuptime.delete(0, END)
 
-            selectitem=requested_table.selection()[0]
+            selectitem = requested_table.selection()[0]
             bid_txt.insert(0, requested_table.item(selectitem)['values'][0])
-            pickaddress.insert(0, requested_table.item(selectitem)['values'][1])
-            dropaddress.insert(0, requested_table.item(selectitem)['values'][2])
+            pickaddress.insert(
+                0, requested_table.item(selectitem)['values'][1])
+            dropaddress.insert(
+                0, requested_table.item(selectitem)['values'][2])
             pickupdate.insert(0, requested_table.item(selectitem)['values'][3])
             pickuptime.insert(0, requested_table.item(selectitem)['values'][4])
 

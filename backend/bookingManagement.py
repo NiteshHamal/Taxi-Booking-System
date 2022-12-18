@@ -28,12 +28,12 @@ def requestBooking(requestb):
     sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
     booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
     WHERE booking.cid=%s booking.status = 'Pending' """
-    values=(requestb, )
+    values = (requestb, )
     request = None
     try:
         conn = connect()
         cursor = conn.cursor()
-        cursor.execute(sql,values)
+        cursor.execute(sql, values)
         request = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -43,8 +43,10 @@ def requestBooking(requestb):
         del values, sql
         return request
 
+
 def requestSearch(name):
-    sql = """SELECT * FROM booking WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(name, name, name)
+    sql = """SELECT * FROM booking WHERE fullname LIKE '%{}%' OR email LIKE '%{}%' OR address LIKE '%{}%'""".format(
+        name, name, name)
     testname = None
     try:
         conn = connect()
@@ -62,13 +64,13 @@ def requestSearch(name):
 
 def cusdastable(book):
     sql = """SELECT bookingid, pickup_address, drop_address, pickup_date, pickup_time FROM booking WHERE cid=%s AND status=%s """
-    values=(book.getCid(), book.getStatus())
-    cuspending=None
+    values = (book.getCid(), book.getStatus())
+    cuspending = None
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql, values)
-        cuspending= cursor.fetchall()
+        cuspending = cursor.fetchall()
         cursor.close()
         conn.close()
     except:
@@ -77,18 +79,19 @@ def cusdastable(book):
         del values, sql
         return cuspending
 
+
 def cancelreqBooking(bid):
     sql = """DELETE FROM booking WHERE bookingid=%s"""
-    values=[bid,]
-    cancelreq=False
+    values = [bid, ]
+    cancelreq = False
     try:
-        conn =connect()
+        conn = connect()
         cursor = conn.cursor()
         cursor.execute(sql, values)
         conn.commit()
         cursor.close()
         conn.close()
-        cancelreq=True
+        cancelreq = True
     except:
         print("Error : ", sys.exc_info())
     finally:
@@ -116,19 +119,19 @@ def requestBooking1167():
 
 
 def admin_update_booking(Info):
-    conn=None
-    sql="""UPDATE booking SET status=%s, did=%s WHERE bookingid=%s"""
-    values=(Info.getStatus(), Info.getDid(), Info.getBookingid())
-    updateResult=False
+    conn = None
+    sql = """UPDATE booking SET status=%s, did=%s WHERE bookingid=%s"""
+    values = (Info.getStatus(), Info.getDid(), Info.getBookingid())
+    updateResult = False
 
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql, values)
         conn.commit()
         cursor.close()
         conn.close()
-        updateResult=True
+        updateResult = True
 
     except:
         print("Error", sys.exc_info())

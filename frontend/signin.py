@@ -96,7 +96,8 @@ class Signin:
         password_frame = LabelFrame(frame1, text="Password")
         password_frame.place(x=175, y=300)
 
-        password11 = Entry(password_frame, text="", font=font2, relief=RAISED, show='*')
+        password11 = Entry(password_frame, text="",
+                           font=font2, relief=RAISED, show='*')
         password11.insert(0, 'niteshhamal')
         password11.pack()
 
