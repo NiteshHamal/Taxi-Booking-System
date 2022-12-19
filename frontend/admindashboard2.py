@@ -1,112 +1,309 @@
 import sys
 import tkinter
 from tkinter import *
-from sqlalchemy import create_engine
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import pymysql
 import mysql.connector
-import pandas
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from backend.adminManagement import adminhistory
-from backend.bookingManagement import requestBooking1167
-from backend.driverManagement import driverManage
+from backend.analyticsbackend import totalbooking, totalcustomers, totaldrivers
+from backend.bookingManagement import requestBooking1167, admin_update_booking
+from backend.driverManagement import driverManage, drivertablead, statusUpdate
+from frontend import signin
+from middleware.booking import Booking
+from middleware.driver import Driver
 
 
 class AdminDashboard():
-    def __init__(self, root):
-        self.root=root
+    def __init__(self, main):
+        self.main=main
 
-        self.root.title("Admin Dashboard")
+        self.main.title("Admin Dashboard")
 
-        screenwidth=self.root.winfo_screenwidth()
-        screenheight=self.root.winfo_screenheight()
-        self.root.minsize(screenwidth,screenheight)
-        self.root.state('zoomed')
+        screenwidth=self.main.winfo_screenwidth()
+        screenheight=self.main.winfo_screenheight()
+        self.main.minsize(screenwidth,screenheight)
+        self.main.state('zoomed')
         # self.root.iconbitmap("H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Iconsmind-Outline-Taxi-2.ico")
 
 
-        sidefont=('Times New Roman', 18,'normal')
+        sidefont=('Times New Roman', 15,'normal')
 
-        sqlEngine=create_engine('mysql+pymysql://root:@localhost/taxi')
-        db_connection=sqlEngine.connect()
 
-        upframe=Frame(self.root, height=100, bg="#4CD964")
+
+        upframe=Frame(self.main, height=100, bg="#4CD964")
         upframe.pack(side=TOP, fill=BOTH)
 
-        titlelabel=Label(self.root, text="Welcome Nitesh Hamal",bg="#4CD964", font=('Times New Roman',25,'bold'))
+        titlelabel=Label(self.main, text="Welcome Nitesh Hamal",bg="#4CD964", font=('Times New Roman',25,'bold'))
         titlelabel.place(x=20, y=30)
 
-        sideframe=Frame(self.root, width=400, bg='#e2f3f5')
+        sideframe=Frame(self.main, width=350, bg='#e2f3f5')
         sideframe.pack(side=LEFT, fill=BOTH)
 
         image = Image.open("H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Order ride-bro.png")
-        image = image.resize((300, 300))
+        image = image.resize((250, 250))
         image = ImageTk.PhotoImage(image)
         Image_Label = Label(sideframe, image=image, bg='#e2f3f5')
         Image_Label.image = image
-        Image_Label.place(x=30, y=20)
+        Image_Label.place(x=60, y=20)
 
         titlelbl=Label(sideframe, text="Taxi Booking System", bg='#e2f3f5', font=('Times New Roman', 16,'bold'))
-        titlelbl.place(x=80, y=320)
+        titlelbl.place(x=90, y=270)
 
         def assigndriver():
             root=tkinter.Toplevel()
             root.title("Assign Driver | Admin Dashboard")
-            frame_width=1000
+            frame_width=1200
             frame_height=500
+            root.resizable(0,0)
             screen_width=root.winfo_screenwidth()
             screen_height=root.winfo_screenheight()
             x_cordinate=int((screen_width/2)-(frame_width/2))
             y_cordinate=int((screen_height/2)-(frame_height/2))
-            root.geometry("{}x{}+{}+{}".format(frame_width, frame_height, x_cordinate+120, y_cordinate+70))
+            root.geometry("{}x{}+{}+{}".format(frame_width, frame_height, x_cordinate+120, y_cordinate))
+
+            topframe=Frame(root, height=80, bg="#4CD964")
+            topframe.pack(side=TOP, fill=BOTH)
+
+            assgnlabel=Label(topframe, text="ASSIGN DRIVER FOR CUSTOMERS", font=('Times New Roman',18,'bold'))
+            assgnlabel.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+            assigndriverframe=Frame(root, height=200)
+            assigndriverframe.pack(side=TOP, fill=BOTH)
+
+            bid_frame = LabelFrame(assigndriverframe, text="Booking ID", font=sidefont)
+            bid_frame.place(x=10, y=10)
+
+            bid_txt = Entry(bid_frame, text="", font=sidefont)
+            bid_txt.pack()
+
+            paddress_frame = LabelFrame(assigndriverframe, text='Pickup Address', font=sidefont)
+            paddress_frame.place(x=310, y=10)
+
+            paddress_txt = Entry(paddress_frame, text='', font=sidefont)
+            paddress_txt.pack()
+
+            daddress_label = LabelFrame(assigndriverframe, text="Drop Address", font=sidefont)
+            daddress_label.place(x=610, y=10)
+
+            daddress_txt1 = Entry(daddress_label, text='', font=sidefont)
+            daddress_txt1.pack()
+
+            date_label = LabelFrame(assigndriverframe, text="Pickup Date", font=sidefont)
+            date_label.place(x=10, y=120)
+
+            date_txt = Entry(date_label, text='', font=sidefont)
+            date_txt.pack()
+
+            time_label = LabelFrame(assigndriverframe, text="Pickup Time", font=sidefont)
+            time_label.place(x=310, y=120)
+
+            time_txt = Entry(time_label, text='', font=sidefont)
+            time_txt.pack()
+
+            driver_label = LabelFrame(
+            assigndriverframe, text='Assign Driver', font=sidefont)
+            driver_label.place(x=610, y=120)
+
+            driver_txt = Entry(driver_label, text='', font=sidefont)
+            driver_txt.pack()
+
+            def drivercheck():
+                app = tkinter.Toplevel()
+                app.title("Check Driver")
+                app.resizable(False, False)  # windows resizable false
+                app.config(background="#CECED2")  # background color change
+                width = 550
+                height = 500
+                screenwidth = app.winfo_screenwidth()
+                screenheight = app.winfo_screenheight()
+
+                xCordinate = int((screenwidth/2)-(width/2))
+                yCordinate = int((screenheight/2)-(height/2))
+
+                app.geometry('{}x{}+{}+{}'.format(width,
+                         height, xCordinate, yCordinate))
+
+                checktable = ttk.Treeview(app, height=25)
+                checktable['columns'] = ('did', 'fullname', 'address')
+                checktable.column('#0', width=0, stretch=0)
+                checktable.column('did', width=100, anchor=CENTER)
+                checktable.column('fullname', width=100, anchor=CENTER)
+                checktable.column('address', width=100, anchor=CENTER)
+
+                checktable.heading('#0', text='', anchor=CENTER)
+                checktable.heading('did', text='Driver ID', anchor=CENTER)
+                checktable.heading('fullname', text='Full Name', anchor=CENTER)
+                checktable.heading('address', text='Address', anchor=CENTER)
+                checktable.pack(fill=BOTH)
+
+                def checkdriver():
+                    driverad = drivertablead()
+                    for row1 in driverad:
+                        checktable.insert(parent='', index='end',
+                                      values=(row1[0], row1[1], row1[2]))
+                checkdriver()
+
+                def getselecteddriver(nitesh):
+                    driver_txt.delete(0, END)
+                    itemselect720 = checktable.selection()[0]
+                    driver_txt.insert(0, checktable.item(
+                    itemselect720)['values'][0])
+                    app.destroy()
+
+                checktable.bind('<<TreeviewSelect>>', getselecteddriver)
+
+            check_btn = Button(assigndriverframe, command=drivercheck,
+                           text="Check Driver", font=sidefont, relief=RAISED, bd=5)
+            check_btn.place(x=900, y=20)
+
+            def confirm_booking():
+
+                    if driver_txt.get() == '':
+                                    messagebox.showwarning("TBS", "Please enter driver ID")
+                                    root.destroy()
+
+                    else:
+                        booking = Booking(bookingid=bid_txt.get(),
+                                  did=driver_txt.get(), status='Confirmed')
+                        updateResult = admin_update_booking(booking)
+                        driver = Driver(did=driver_txt.get(), status="Inactive")
+                        result = statusUpdate(driver)
+                        driver_txt.delete(0, END)
+                    if updateResult == True:
+                        messagebox.showinfo("TBS", "The driver is assigned successfully")
+                        requestTable.delete(*requestTable.get_children())
+                        requesttable()
+                        historytable.delete(*historytable.get_children())
+                        driverValue()
+                        root.destroy()
+
+                    else:
+                            messagebox.showerror("TBS", "Error")
+
+            confirm_btn = Button(assigndriverframe, text="Confirm Booking",command=confirm_booking, font=sidefont, relief=RAISED, bd=5)
+            confirm_btn.place(x=900, y=100)
+
+
+
+            assigndrivertable=ttk.Treeview(root)
+            assigndrivertable.pack(side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10,0))
+            assigndrivertable['columns'] = (
+            'bid', 'cid', 'fullname', 'paddress', 'daddress', 'pdate', 'ptime', 'status')
+            assigndrivertable.column('#0', width=0, stretch=0)
+            assigndrivertable.column('bid', width=0, stretch=0)
+            assigndrivertable.column('cid', width=50, anchor=CENTER)
+            assigndrivertable.column('fullname', width=100, anchor=CENTER)
+            assigndrivertable.column('paddress', width=100, anchor=CENTER)
+            assigndrivertable.column('daddress', width=100, anchor=CENTER)
+            assigndrivertable.column('pdate', width=100, anchor=CENTER)
+            assigndrivertable.column('ptime', width=100, anchor=CENTER)
+            assigndrivertable.column('status', width=100, anchor=CENTER)
+
+            assigndrivertable.heading('#0', text='', anchor=CENTER)
+            assigndrivertable.heading('bid', text='', anchor=CENTER)
+            assigndrivertable.heading('cid', text='Customer ID', anchor=CENTER)
+            assigndrivertable.heading('fullname', text='Fullname', anchor=CENTER)
+            assigndrivertable.heading('paddress', text='Pickup Address', anchor=CENTER)
+            assigndrivertable.heading('daddress', text='Drop Address', anchor=CENTER)
+            assigndrivertable.heading('pdate', text='Pickup Date', anchor=CENTER)
+            assigndrivertable.heading('ptime', text='Pickup Time', anchor=CENTER)
+            assigndrivertable.heading('status', text='Booking Status', anchor=CENTER)
+
+            def assigndrivertable11():
+                request = requestBooking1167()
+                for row in request:
+                    assigndrivertable.insert(parent='', index='end', values=(
+                        row[1], row[0], row[2], row[3], row[4], row[5], row[6], row[7]))
+
+            assigndrivertable11()
+
+            def getbookingtabledata(a):
+                bid_txt.delete(0, END)
+                paddress_txt.delete(0, END)
+                daddress_txt1.delete(0, END)
+                date_txt.delete(0, END)
+                time_txt.delete(0, END)
+
+                itemselect11 = assigndrivertable.selection()[0]
+
+                bid_txt.insert(0, assigndrivertable.item(itemselect11)['values'][0])
+                paddress_txt.insert(0, assigndrivertable.item(itemselect11)['values'][3])
+                daddress_txt1.insert(0, assigndrivertable.item(itemselect11)['values'][4])
+                date_txt.insert(0, assigndrivertable.item(itemselect11)['values'][5])
+                time_txt.insert(0, assigndrivertable.item(itemselect11)['values'][6])
+
+            assigndrivertable.bind('<<TreeviewSelect>>', getbookingtabledata)
+
+
             root.mainloop()
 
         assignbtn=Button(sideframe, text="Assign Driver",command=assigndriver,font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        assignbtn.place(x=100, y=400)
+        assignbtn.place(x=100, y=350)
 
         customerbtn=Button(sideframe, text="Customer Management", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        customerbtn.place(x=55, y=450)
+        customerbtn.place(x=70, y=400)
 
         driverbtn=Button(sideframe, text="Driver Management", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        driverbtn.place(x=70, y=500)
+        driverbtn.place(x=80, y=450)
 
         passwordbtn=Button(sideframe, text="Change Password", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        passwordbtn.place(x=75, y=550)
+        passwordbtn.place(x=90, y=500)
 
-        logoutbtn=Button(sideframe, text="Logout", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        logoutbtn.place(x=120, y=600)
+        def logout720():
+            self.main.destroy()
+            root1 = Tk()
+            obj = signin.TaxiLogin(root1)
+            root1.mainloop()
+
+        logoutbtn=Button(sideframe, text="Logout",command=logout720, font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        logoutbtn.place(x=120, y=550)
 
         def exit():
             sys.exit()
 
         exitbtn=Button(sideframe, text="Exit", font=sidefont,command=exit,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        exitbtn.place(x=130, y=650)
+        exitbtn.place(x=130, y=600)
 
-        graphframe=Frame(self.root,height=400, bg='#ffffff')
-        graphframe.pack(side=TOP, fill=BOTH)
+        centerframe=Frame(self.main,height=250, bg='#ffffff')
+        centerframe.pack(side=TOP, fill=BOTH)
+
+        analyticsframe1=Frame(centerframe,bg='#e2f3f5', width=250, height=200)
+        analyticsframe1.place(x=40, y=20)
+
+        customerresult=totalcustomers()
+        customerresult1=customerresult[0]
+        customerresult2=customerresult1[0]
+
+        lbl1=Label(analyticsframe1, text="Total Customers \n\n {}".format(customerresult2), font=sidefont, bg='#e2f3f5')
+        lbl1.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        analyticsframe2 = Frame(centerframe, bg='#e2f3f5', width=250, height=200)
+        analyticsframe2.place(x=320, y=20)
+
+        bookingresult=totalbooking()
+        bookingresult1=bookingresult[0]
+        bookingresult2=bookingresult1[0]
+
+        lbl2 = Label(analyticsframe2, text="Total Booking \n\n {}".format(bookingresult2), font=sidefont, bg='#e2f3f5')
+        lbl2.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        analyticsframe3 = Frame(centerframe, bg='#e2f3f5', width=250, height=200)
+        analyticsframe3.place(x=600, y=20)
+
+        driverresult=totaldrivers()
+        driverresult1=driverresult[0]
+        driverresult2=driverresult1[0]
+
+        lbl3 = Label(analyticsframe3, text="Total Drivers \n\n {}".format(driverresult2), font=sidefont, bg='#e2f3f5')
+        lbl3.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        analyticsframe4 = Frame(centerframe, bg='#e2f3f5', width=250, height=200)
+        analyticsframe4.place(x=880, y=20)
+
+        lbl4 = Label(analyticsframe4, text="Last 15 days booking \n\n 200", font=sidefont, bg='#e2f3f5')
+        lbl4.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
-
-
-        query='SELECT *,count(bookingid) as ID FROM booking group by status limit 6'
-        df=pandas.read_sql(query, db_connection, index_col="status")
-        fig=df.plot.pie(title="Booking Report",y="ID",figsize=(4,4),legend=True, autopct='%1.0f%%').get_figure()
-
-        plot=FigureCanvasTkAgg(fig, graphframe)
-        plot.get_tk_widget().pack(side=LEFT, fill=BOTH, padx=(40,0))
-
-        query2='SELECT *,count(bookingid) as ID FROM booking group by pickup_date limit 6'
-        df2=pandas.read_sql(query2, db_connection, index_col="pickup_date")
-        fig2=df2.plot.bar(title="Booking Report",y="ID",figsize=(5,4),).get_figure()
-        plot=FigureCanvasTkAgg(fig2, graphframe)
-        plot.get_tk_widget().place(relx=0.5, rely=0.5,anchor=CENTER )
-
-        query3='SELECT *,count(bookingid) as ID FROM booking group by pickup_date limit 6'
-        df3=pandas.read_sql(query3, db_connection, index_col="pickup_date")
-        fig3=df3.plot.line(title="Booking Report",y="ID",figsize=(5,4),).get_figure()
-        plot=FigureCanvasTkAgg(fig3, graphframe)
-        plot.get_tk_widget().pack(side=RIGHT, fill=BOTH)
 
 
         # style of table
@@ -128,7 +325,7 @@ class AdminDashboard():
         style.map("Treeview.Heading",
                   )
 
-        maintab=ttk.Notebook(self.root)
+        maintab=ttk.Notebook(self.main)
         maintab.pack(side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10,0))
 
         frame1=Frame(maintab)
@@ -206,6 +403,6 @@ class AdminDashboard():
 
 
 if __name__=='__main__':
-    root=Tk()
-    AdminDashboard(root)
-    root.mainloop()
+    main=Tk()
+    AdminDashboard(main)
+    main.mainloop()

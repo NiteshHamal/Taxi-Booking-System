@@ -86,7 +86,7 @@ class Registration:
         def signup():
             self.root.destroy()
             root = Tk()
-            obj = signin.Signin(root)
+            obj = signin.TaxiLogin(root)
             root.mainloop()
 
         # making function for enter and leave event

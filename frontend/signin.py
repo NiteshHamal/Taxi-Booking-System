@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
+from frontend import admindashboard2
 from frontend.customerDashboard import CusDashboard
 from frontend.adminDashboard import AdminDashboard
 from frontend.driverDashboard import DriverDashboard
@@ -11,14 +12,13 @@ from middleware.admin import Admin
 from middleware import Global
 
 
-class Signin:
+class TaxiLogin():
 
     def __init__(self, root):
         self.root = root
         self.root.title("SignIn")
-        self.root.geometry("550x500")  # size of the window
         self.root.state('zoomed')  # windows on zoomed / full-screen size
-        # self.root.resizable(False, False)  # windows resizable false
+        self.root.resizable(False, False)  # windows resizable false
         self.root.config(background="#CECED2")  # background color change
 
         def signup():
@@ -73,7 +73,7 @@ class Signin:
                     Global.currentAdmin = auser
                     self.root.destroy()
                     root = Tk()
-                    frontend.adminDashboard.AdminDashboard(root)
+                    admindashboard2.AdminDashboard(root)
                     root.mainloop()
 
                 else:
@@ -123,3 +123,8 @@ class Signin:
         btn_signup.place(x=200, y=350)
 
         frame2.place(x=775, y=100)
+
+if __name__ == '__main__':
+    root = Tk()
+    TaxiLogin(root)
+    root.mainloop()
