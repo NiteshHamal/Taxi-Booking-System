@@ -1,14 +1,15 @@
 import sys
 import tkinter
 from tkinter import *
-import mysql.connector
 from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
-from backend.adminManagement import adminhistory
+from backend.adminManagement import adminhistory, admin_change_password
 from backend.analyticsbackend import totalbooking, totalcustomers, totaldrivers
 from backend.bookingManagement import requestBooking1167, admin_update_booking
-from backend.driverManagement import driverManage, drivertablead, statusUpdate
-from frontend import signin
+from backend.driverManagement import drivertablead, statusUpdate
+from frontend import signin, customergui, drivergui
+from middleware import Global
+from middleware.admin import Admin
 from middleware.booking import Booking
 from middleware.driver import Driver
 
@@ -16,29 +17,31 @@ from middleware.driver import Driver
 class AdminDashboard():
     def __init__(self, main):
         self.main=main
-
         self.main.title("Admin Dashboard")
-
         screenwidth=self.main.winfo_screenwidth()
         screenheight=self.main.winfo_screenheight()
         self.main.minsize(screenwidth,screenheight)
         self.main.state('zoomed')
         # self.root.iconbitmap("H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Iconsmind-Outline-Taxi-2.ico")
 
+        adminid=Entry(self.main)
+        adminid.insert(0, Global.currentAdmin[0])
 
+        # font
         sidefont=('Times New Roman', 15,'normal')
 
-
-
+        # top frame
         upframe=Frame(self.main, height=100, bg="#4CD964")
         upframe.pack(side=TOP, fill=BOTH)
 
         titlelabel=Label(self.main, text="Welcome Nitesh Hamal",bg="#4CD964", font=('Times New Roman',25,'bold'))
         titlelabel.place(x=20, y=30)
 
+        # side frame
         sideframe=Frame(self.main, width=350, bg='#e2f3f5')
         sideframe.pack(side=LEFT, fill=BOTH)
 
+        # image
         image = Image.open("H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Order ride-bro.png")
         image = image.resize((250, 250))
         image = ImageTk.PhotoImage(image)
@@ -240,13 +243,78 @@ class AdminDashboard():
         assignbtn=Button(sideframe, text="Assign Driver",command=assigndriver,font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         assignbtn.place(x=100, y=350)
 
-        customerbtn=Button(sideframe, text="Customer Management", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        # function to open customer management gui
+        def customermanagementgui():
+            root=tkinter.Toplevel()
+            customergui.CustomerCRUD(root)
+            root.mainloop()
+
+        customerbtn=Button(sideframe, text="Customer Management",command=customermanagementgui, font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         customerbtn.place(x=70, y=400)
 
-        driverbtn=Button(sideframe, text="Driver Management", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        # function to open driver management gui
+        def drivermanagementgui():
+            root = tkinter.Toplevel()
+            drivergui.DriverCRUD(root)
+            root.mainloop()
+
+        driverbtn=Button(sideframe, text="Driver Management", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0, command=drivermanagementgui)
         driverbtn.place(x=80, y=450)
 
-        passwordbtn=Button(sideframe, text="Change Password", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        def changepassword_gui():
+            password=tkinter.Toplevel()
+            password.title("Change Password")
+            password.resizable(False, False)  # windows resizable false
+            password.config(background="#4CD964")  # background color change
+            width = 550
+            height = 300
+            screenwidth = password.winfo_screenwidth()
+            screenheight = password.winfo_screenheight()
+            xCordinate = int((screenwidth / 2) - (width / 2))
+            yCordinate = int((screenheight / 2) - (height / 2))
+            password.geometry('{}x{}+{}+{}'.format(width,height, xCordinate, yCordinate))
+
+            labelframe=Frame(password,bg="#e2f3f5", width=500, height=250)
+            labelframe.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+            newpasswordlbl=Label(labelframe, text="New Password: ",bg="#e2f3f5", font=('Times New Roman',14))
+            newpasswordlbl.place(x=10, y=30)
+
+            newpasswordtxt=Entry(labelframe, font=('Times New Roman',14), width=30)
+            newpasswordtxt.place(x=180, y=30)
+
+            confirmpasswordlbl = Label(labelframe, text="Confirm Password: ",bg="#e2f3f5", font=('Times New Roman', 14))
+            confirmpasswordlbl.place(x=10, y=90)
+
+            confirmpasswordtxt = Entry(labelframe, font=('Times New Roman', 14), width=30)
+            confirmpasswordtxt.place(x=180, y=90)
+
+            def changepassword():
+                newpassword=newpasswordtxt.get()
+                confirmpassword=confirmpasswordtxt.get()
+
+                if newpassword==confirmpassword:
+                    password=Admin(adminid=adminid.get(), password=confirmpassword)
+                    result=admin_change_password(password)
+                    if result==True:
+                        messagebox.showinfo("TBS","The password is changed successfully")
+                        self.main.destroy()
+                        root=Tk()
+                        signin.TaxiLogin(root)
+                        root.mainloop()
+
+                    else:
+                        messagebox.showerror("TBS","Error Occurred!")
+
+                else:
+                    messagebox.showwarning("TBS","The new password and confirm password does not matched!")
+
+            changepasswordbtn=Button(labelframe,command=changepassword, text="Change Password",font=('Times New Roman', 14) )
+            changepasswordbtn.place(x=180, y=150)
+
+            password.mainloop()
+
+        passwordbtn=Button(sideframe,command=changepassword_gui, text="Change Password", font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         passwordbtn.place(x=90, y=500)
 
         def logout720():
@@ -302,9 +370,6 @@ class AdminDashboard():
 
         lbl4 = Label(analyticsframe4, text="Last 15 days booking \n\n 200", font=sidefont, bg='#e2f3f5')
         lbl4.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-
-
 
         # style of table
         style = ttk.Style()
