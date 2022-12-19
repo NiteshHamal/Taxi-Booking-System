@@ -3,61 +3,51 @@ from backend.connection import connect
 
 
 def totalbooking():
-
-    conn=None
-    sql="""SELECT COUNT(bookingid) from booking"""
-    bookingresult=None
+    sql = """SELECT COUNT(bookingid) from booking"""
+    bookingresult = None
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql)
-        bookingresult=cursor.fetchall()
+        bookingresult = cursor.fetchall()
         cursor.close()
         conn.close()
-
-
     except:
         print("Error", sys.exc_info())
-
     finally:
         del sql, conn
         return bookingresult
 
 
 def totalcustomers():
-
-    conn=None
-    sql="""SELECT COUNT(cid) from customer"""
-    customerresult=None
+    sql = """SELECT COUNT(cid) from customer"""
+    customerresult = None
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql)
-        customerresult=cursor.fetchall()
+        customerresult = cursor.fetchall()
         cursor.close()
         conn.close()
-
-
     except:
         print("Error", sys.exc_info())
-
     finally:
         del sql, conn
         return customerresult
 
+
 def totaldrivers():
 
-    conn=None
-    sql="""SELECT COUNT(did) from driver"""
-    driverresult=None
+    conn = None
+    sql = """SELECT COUNT(did) from driver"""
+    driverresult = None
     try:
-        conn=connect()
-        cursor=conn.cursor()
+        conn = connect()
+        cursor = conn.cursor()
         cursor.execute(sql)
-        driverresult=cursor.fetchall()
+        driverresult = cursor.fetchall()
         cursor.close()
         conn.close()
-
 
     except:
         print("Error", sys.exc_info())
@@ -65,3 +55,24 @@ def totaldrivers():
     finally:
         del sql, conn
         return driverresult
+
+
+def monthbookingcount():
+
+    conn = None
+    sql = """select count(bookingid) from booking where pickup_date=MONTH(NOW()) and YEAR(NOW())"""
+    monthresult = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        monthresult = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+    except:
+        print("Error", sys.exc_info())
+
+    finally:
+        del sql, conn
+        return monthresult

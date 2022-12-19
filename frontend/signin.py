@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
-from frontend import admindashboard2
+from frontend import admindashboard
 from frontend.customerDashboard import CusDashboard
-from frontend.adminDashboard import AdminDashboard
 from frontend.driverDashboard import DriverDashboard
 from backend.loginManagement import *
 from middleware.customer import Customer
@@ -18,7 +17,7 @@ class TaxiLogin():
         self.root = root
         self.root.title("SignIn")
         self.root.state('zoomed')  # windows on zoomed / full-screen size
-        self.root.resizable(False, False)  # windows resizable false
+        # self.root.resizable(False, False)  # windows resizable false
         self.root.config(background="#CECED2")  # background color change
 
         def signup():
@@ -73,7 +72,7 @@ class TaxiLogin():
                     Global.currentAdmin = auser
                     self.root.destroy()
                     root = Tk()
-                    admindashboard2.AdminDashboard(root)
+                    admindashboard.AdminDashboard(root)
                     root.mainloop()
 
                 else:
@@ -90,7 +89,7 @@ class TaxiLogin():
         email_frame.place(x=175, y=250)
 
         email_txt = Entry(email_frame, text="", font=font2, relief=RAISED)
-        email_txt.insert(0, 'salman@gmail.com')
+        email_txt.insert(0, 'nitesh0hamal@gmail.com')
         email_txt.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
@@ -98,7 +97,7 @@ class TaxiLogin():
 
         password11 = Entry(password_frame, text="",
                            font=font2, relief=RAISED, show='*')
-        password11.insert(0, 'salman')
+        password11.insert(0, '1234')
         password11.pack()
 
         btn_signin = Button(frame1, text="Submit", font=font3,
@@ -123,6 +122,7 @@ class TaxiLogin():
         btn_signup.place(x=200, y=350)
 
         frame2.place(x=775, y=100)
+
 
 if __name__ == '__main__':
     root = Tk()

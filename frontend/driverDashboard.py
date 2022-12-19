@@ -271,7 +271,7 @@ class DriverDashboard:
 
         # widgets on profile frame ----------------------------------------------------------------------
 
-        dri_fullname = LabelFrame(profile_frame, text= 'Fullname', font=font1)
+        dri_fullname = LabelFrame(profile_frame, text='Fullname', font=font1)
         dri_fullname.place(x=300, y=100)
 
         dri_fullname_txt = Entry(dri_fullname, font=font1)
@@ -281,7 +281,7 @@ class DriverDashboard:
         dri_address = LabelFrame(profile_frame, text='Address', font=font1)
         dri_address.place(x=300, y=190)
 
-        dri_address_txt= Entry(dri_address, font=font1)
+        dri_address_txt = Entry(dri_address, font=font1)
         dri_address_txt.insert(0, Global.currentDriver[2])
         dri_address_txt.pack()
 
@@ -299,7 +299,8 @@ class DriverDashboard:
         dri_number_txt.insert(0, Global.currentDriver[4])
         dri_number_txt.pack()
 
-        dri_payment = LabelFrame(profile_frame, text='Payment Method', font=font1)
+        dri_payment = LabelFrame(
+            profile_frame, text='Payment Method', font=font1)
         dri_payment.place(x=300, y=460)
 
         dri_payment_combo = ttk.Combobox(dri_payment, font=font1, width=18)
@@ -318,7 +319,8 @@ class DriverDashboard:
         #         msg2 = messagebox.showerror(
         #             "Taxi Booking System", "Error Occurred!")
 
-        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED, bd=4, font=font1, bg='#4CD964', command=None)
+        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED,
+                            bd=4, font=font1, bg='#4CD964', command=None)
         update_btn.place(x=800, y=370)
 
 

@@ -1,7 +1,7 @@
-from frontend.signin import Signin
+from frontend.signin import TaxiLogin
 from tkinter import *
 
 if __name__ == '__main__':
     root = Tk()
-    Signin(root)
+    TaxiLogin(root)
     root.mainloop()

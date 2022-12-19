@@ -91,7 +91,7 @@ class CusDashboard:
         def logout720():
             self.root.destroy()
             root = Tk()
-            obj = signin.Signin(root)
+            obj = signin.TaxiLogin(root)
             root.mainloop()
 
         # logout button with image
@@ -245,7 +245,8 @@ class CusDashboard:
 
         # widgets on profile frame ----------------------------------------------------------------------
 
-        cus_fullname = LabelFrame(profile_frame, text= 'Fullname', font=text_font)
+        cus_fullname = LabelFrame(
+            profile_frame, text='Fullname', font=text_font)
         cus_fullname.place(x=300, y=100)
 
         cus_fullname_txt = Entry(cus_fullname, font=text_font)
@@ -255,7 +256,7 @@ class CusDashboard:
         cus_address = LabelFrame(profile_frame, text='Address', font=text_font)
         cus_address.place(x=300, y=190)
 
-        cus_address_txt= Entry(cus_address, font=text_font)
+        cus_address_txt = Entry(cus_address, font=text_font)
         cus_address_txt.insert(0, Global.currentUser[2])
         cus_address_txt.pack()
 
@@ -266,21 +267,24 @@ class CusDashboard:
         cus_email_txt.insert(0, Global.currentUser[3])
         cus_email_txt.pack()
 
-        cus_number = LabelFrame(profile_frame, text="Phone Number", font=text_font)
+        cus_number = LabelFrame(
+            profile_frame, text="Phone Number", font=text_font)
         cus_number.place(x=300, y=370)
 
         cus_number_txt = Entry(cus_number, font=text_font)
         cus_number_txt.insert(0, Global.currentUser[4])
         cus_number_txt.pack()
 
-        cus_password = LabelFrame(profile_frame, text="Password", font=text_font)
+        cus_password = LabelFrame(
+            profile_frame, text="Password", font=text_font)
         cus_password.place(x=300, y=460)
 
         cus_password_txt = Entry(cus_password, font=text_font)
         cus_password_txt.insert(0, Global.currentUser[5])
         cus_password_txt.pack()
 
-        cus_payment = LabelFrame(profile_frame, text='Payment Method', font=text_font)
+        cus_payment = LabelFrame(
+            profile_frame, text='Payment Method', font=text_font)
         cus_payment.place(x=300, y=550)
 
         cus_payment_combo = ttk.Combobox(cus_payment, font=text_font, width=18)
@@ -299,12 +303,9 @@ class CusDashboard:
                 msg2 = messagebox.showerror(
                     "Taxi Booking System", "Error Occurred!")
 
-        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED, bd=4, font=text_font, bg='#4CD964', command=editCustomer)
+        update_btn = Button(profile_frame, text='UPDATE', relief=RAISED,
+                            bd=4, font=text_font, bg='#4CD964', command=editCustomer)
         update_btn.place(x=800, y=370)
-
-
-
-
 
 
 if __name__ == '__main__':

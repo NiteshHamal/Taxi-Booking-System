@@ -12,7 +12,7 @@ class Registration:
         self.root.title("SignUp")
         self.root.geometry("550x500")  # size of the window
         self.root.state('zoomed')  # windows on zoomed / full-screen size
-        self.root.resizable(False, False)  # windows resizable false
+        # self.root.resizable(False, False)  # windows resizable false
         self.root.config(background="#CECED2")  # background color change
 
         font1 = ('Cooper Black', 30, "bold")

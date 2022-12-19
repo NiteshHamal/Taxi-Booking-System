@@ -1,16 +1,15 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
-from backend.customerManagement import customerManage, customerSearch, editCus
-from middleware.customer import Customer
-from backend.customerManagement import register
+from backend.driverManagement import driverManage, editDri, add, driverSearch
+from middleware.driver import Driver
 
 
-class CustomerCRUD():
+class DriverCRUD():
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Customer Management")
+        self.root.title("Driver Management")
         frame_width = 1000
         frame_height = 550
         root.resizable(0, 0)
@@ -33,22 +32,22 @@ class CustomerCRUD():
         searchtxt.place(x=100, y=25)
 
         # function to search customer -----------------------------------------------------------------
-        def searchCus():
+        def searchDri():
             treeview.delete(*treeview.get_children())
-            customertest = searchtxt.get()
-            testname = customerSearch(customertest)
-            for row in testname:
+            drivertest = searchtxt.get()
+            sdriver = driverSearch(drivertest)
+            for row in sdriver:
                 treeview.insert(parent='', index='end', values=(
-                    row[0], row[1], row[2], row[3], row[4], row[5]))
+                    row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
 
         searchbtn = Button(upframe, text=" Search ",
-                           font=font, width=10, command=searchCus)
+                           font=font, width=10, command=searchDri)
         searchbtn.place(x=340, y=18)
 
         formframe = Frame(self.root, height=180)
         formframe.pack(side=TOP, fill=BOTH)
 
-        cidtxt = Entry()
+        didtxt = Entry()
 
         namelabel = Label(formframe, text="Name: ", font=font)
         namelabel.place(x=20, y=20)
@@ -62,11 +61,11 @@ class CustomerCRUD():
         emailtxt = Entry(formframe, font=font)
         emailtxt.place(x=120, y=70)
 
-        mobilelbl = Label(formframe, text="Mobile: ", font=font)
-        mobilelbl.place(x=20, y=120)
+        licenselbl = Label(formframe, text="License.no: ", font=font)
+        licenselbl.place(x=20, y=120)
 
-        mobiletxt = Entry(formframe, font=font)
-        mobiletxt.place(x=120, y=120)
+        licensetxt = Entry(formframe, font=font)
+        licensetxt.place(x=120, y=120)
 
         # ------------------------------------Second Column------------------------------------
 
@@ -82,63 +81,59 @@ class CustomerCRUD():
         passwordtxt = Entry(formframe, font=font)
         passwordtxt.place(x=470, y=70)
 
-        paymentlabel = Label(formframe, text="Payment: ", font=font)
-        paymentlabel.place(x=370, y=120)
+        # statuslbl = Label(formframe, text="Payment: ", font=font)
+        # statuslbl.place(x=370, y=120)
+        #
+        # statustxt = Entry(formframe, font=font)
+        # statustxt.place(x=470, y=120)
 
-        data = ['Cash', 'Online']
-
-        paymentcombo = ttk.Combobox(formframe, values=data, font=font)
-        paymentcombo.place(x=470, y=120)
-
-        # function to add new customers ------------------------------------------------------------------
-        def addCustomer():
-            customer = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
-                                number=mobiletxt.get(), password=passwordtxt.get(), payment=paymentcombo.get())
-            result = register(customer)
+        # function to add new driver ------------------------------------------------------------------
+        def addDriver():
+            driver = Driver(did='', fullname=nametxt.get(), address=addresstxt.get(
+            ), email=emailtxt.get(), licenseno=licensetxt.get(), password=passwordtxt.get(), status="Active")
+            result = add(driver)
             if result == True:
                 msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Customer Registration Successful")
+                    "Taxi Booking System", "Driver Added Successfully!")
                 treeview.delete(*treeview.get_children())
-                customerValue()
-
+                driverValue()
             else:
-                msg2 = messagebox.showerror(
+                msg2 = messagebox.showinfo(
                     "Taxi Booking System", "Error Occurred!")
 
         savebtn = Button(formframe, text="  Save Record  ",
-                         bg="#4CD964", font=font, command=addCustomer)
+                         bg="#4CD964", font=font, command=addDriver)
         savebtn.place(x=780, y=20)
 
-        # function to edit or to update customer--------------------------------------------------------
-        def editCustomer():
-            customer1 = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
-                                 number=mobiletxt.get(), payment=paymentcombo.get(), cid=cidtxt.get())
-            ecustomer = editCus(customer1)
-            if ecustomer == True:
+        # function to edit or to update driver--------------------------------------------------------
+        def editDriver():
+            driver1 = Driver(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
+                             licenseno=licensetxt.get(),  did=didtxt.get())
+            edriver = editDri(driver1)
+            if edriver == True:
                 msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Customer Edit Successful")
+                    "Taxi Booking System", "Driver Edit Successful")
                 treeview.delete(*treeview.get_children())
-                customerValue()
+                driverValue()
             else:
                 msg2 = messagebox.showerror(
                     "Taxi Booking System", "Error Occurred!")
 
         updatebtn = Button(formframe, text="Update Record",
-                           bg="#4CD964", font=font, command=editCustomer)
+                           bg="#4CD964", font=font, command=editDriver)
         updatebtn.place(x=780, y=70)
 
         # function to clear all field -----------------------------------------------------------------
         def clearallfield():
-            cidtxt.delete(0, END)
+            didtxt.delete(0, END)
             nametxt.delete(0, END)
             addresstxt.delete(0, END)
             emailtxt.delete(0, END)
-            mobiletxt.delete(0, END)
+            licensetxt.delete(0, END)
             passwordtxt.delete(0, END)
-            paymentcombo.delete(0, END)
             searchtxt.delete(0, END)
             treeview.delete(*treeview.get_children())
-            customerValue()
+            driverValue()
 
         clearbtn = Button(formframe, text="   Clear Field   ",
                           bg="#4CD964", font=font, command=clearallfield)
@@ -149,23 +144,23 @@ class CustomerCRUD():
         treeview = ttk.Treeview(self.root)
         treeview.pack(side=BOTTOM, fill=BOTH, expand=TRUE)
 
-        treeview['columns'] = ('cid', 'name', 'address',
-                               'email', 'number', 'payment')
+        treeview['columns'] = ('did', 'fullname', 'address',
+                               'email', 'licenseno', 'status')
         treeview.column('#0', width=0, stretch=0)
-        treeview.column('cid', width=100, anchor=CENTER)
-        treeview.column('name', width=100, anchor=CENTER)
+        treeview.column('did', width=100, anchor=CENTER)
+        treeview.column('fullname', width=100, anchor=CENTER)
         treeview.column('address', width=100, anchor=CENTER)
         treeview.column('email', width=100, anchor=CENTER)
-        treeview.column('number', width=100, anchor=CENTER)
-        treeview.column('payment', width=100, anchor=CENTER)
+        treeview.column('licenseno', width=100, anchor=CENTER)
+        treeview.column('status', width=100, anchor=CENTER)
 
         treeview.heading('#0', text='', anchor=CENTER)
-        treeview.heading('cid', text='Customer ID', anchor=CENTER)
-        treeview.heading('name', text='Name', anchor=CENTER)
+        treeview.heading('did', text='Customer ID', anchor=CENTER)
+        treeview.heading('fullname', text='Name', anchor=CENTER)
         treeview.heading('address', text='Address', anchor=CENTER)
         treeview.heading('email', text='Email', anchor=CENTER)
-        treeview.heading('number', text='Mobile No', anchor=CENTER)
-        treeview.heading('payment', text='Payment', anchor=CENTER)
+        treeview.heading('licenseno', text='License No', anchor=CENTER)
+        treeview.heading('status', text='Payment', anchor=CENTER)
 
         style = ttk.Style()
         style.theme_use("default")
@@ -187,36 +182,36 @@ class CustomerCRUD():
         style.map("Treeview.Heading",
                   background=[('active', '#3484F0')], )
 
-        # function to show values in customer Table -------------------------------------------------
-        def customerValue():
-            customertable = customerManage()
-            for row in customertable:
+        # function to show values in driver Table -------------------------------------------------
+        def driverValue():
+            drivertable = driverManage()
+            for row in drivertable:
                 treeview.insert(parent='', index='end', values=(
                     row[0], row[1], row[2], row[3], row[4], row[5]))
 
-        customerValue()
+        driverValue()
 
-        def selectcustomertable(a):
-            cidtxt.delete(0, END)
+        def selectdriverTable(a):
+            didtxt.delete(0, END)
             nametxt.delete(0, END)
             addresstxt.delete(0, END)
             emailtxt.delete(0, END)
-            mobiletxt.delete(0, END)
+            licensetxt.delete(0, END)
             passwordtxt.delete(0, END)
-            paymentcombo.delete(0, END)
+            searchtxt.delete(0, END)
 
-            selectitem = treeview.selection()[0]
-            cidtxt.insert(0, treeview.item(selectitem)['values'][0])
-            nametxt.insert(0, treeview.item(selectitem)['values'][1])
-            addresstxt.insert(0, treeview.item(selectitem)['values'][2])
-            emailtxt.insert(0, treeview.item(selectitem)['values'][3])
-            mobiletxt.insert(0, treeview.item(selectitem)['values'][4])
-            paymentcombo.insert(0, treeview.item(selectitem)['values'][5])
+            selectitem1 = treeview.selection()[0]
+            didtxt.insert(0, treeview.item(selectitem1)['values'][0])
+            nametxt.insert(0, treeview.item(selectitem1)['values'][1])
+            addresstxt.insert(0, treeview.item(selectitem1)['values'][2])
+            emailtxt.insert(0, treeview.item(selectitem1)['values'][3])
+            licensetxt.insert(
+                0, treeview.item(selectitem1)['values'][4])
 
-        treeview.bind('<<TreeviewSelect>>', selectcustomertable)
+        treeview.bind('<<TreeviewSelect>>', selectdriverTable)
 
 
 if __name__ == '__main__':
     root = Tk()
-    CustomerCRUD(root)
+    DriverCRUD(root)
     root.mainloop()
