@@ -23,6 +23,27 @@ def insert(bookingInfo):
         del values, sql
         return result
 
+def customer_edit_booking(book):
+    conn=None
+    sql="""UPDATE booking SET pickup_address=%s, drop_address=%s, pickup_date=%s, pickup_time=%s WHERE bookingid=%s"""
+    values=(book.getPickup_Address(), book.getDrop_Address(), book.getPickup_Date(), book.getPickup_Time(), book.getBookingid())
+    updateResult=False
+
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        updateResult = True
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del conn, values, sql
+        return updateResult
+
+
 
 def requestBooking(requestb):
     sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
@@ -138,3 +159,21 @@ def admin_update_booking(Info):
     finally:
         del values, sql, conn
         return updateResult
+
+
+def customerbookinghistory_table(cid):
+    sql = """SELECT bookingid, pickup_address, drop_address, pickup_date, pickup_time FROM booking WHERE cid=%s AND status='Completed'"""
+    values = (cid,)
+    historyResult = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        historyResult = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return historyResult

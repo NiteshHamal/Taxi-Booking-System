@@ -79,8 +79,7 @@ class AdminDashboard():
             assigndriverframe = Frame(root, height=200)
             assigndriverframe.pack(side=TOP, fill=BOTH)
 
-            bid_frame = LabelFrame(
-                assigndriverframe, text="Booking ID", font=sidefont)
+            bid_frame = LabelFrame(assigndriverframe, text="Booking ID", font=sidefont)
             bid_frame.place(x=10, y=10)
 
             bid_txt = Entry(bid_frame, text="", font=sidefont)

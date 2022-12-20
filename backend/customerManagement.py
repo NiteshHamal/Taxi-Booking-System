@@ -94,3 +94,22 @@ def deleteCus(cid):
     finally:
         del values, sql
         return dcustomer
+
+
+def customer_change_password(cidInfo):
+    sql = """UPDATE customer SET password=%s WHERE cid=%s"""
+    values = (cidInfo.getPassword(), cidInfo.getCid())
+    result = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        result = True
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del values, sql
+        return result
