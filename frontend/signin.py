@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
-from frontend import admindashboard, customerdashboard2
-from frontend.customerDashboard import CusDashboard
+from frontend import admindashboard, customerdashboard
 from frontend.driverDashboard import DriverDashboard
 from backend.loginManagement import *
 from middleware.customer import Customer
@@ -54,7 +53,7 @@ class TaxiLogin():
                     Global.currentUser = user
                     self.root.destroy()
                     root = Tk()
-                    customerdashboard2.CustomerDashboard(root)
+                    customerdashboard.CustomerDashboard(root)
                     root.mainloop()
 
                 elif duser != None:
@@ -77,7 +76,7 @@ class TaxiLogin():
 
                 else:
                     msg4 = messagebox.showerror(
-                        "Taxi Booking System", "Error: Wrong Username or Password")
+                        "Taxi Booking System", "Error: Wrong Email or Password")
 
         # First frame
         frame1 = Frame(root, bg="#EFEFF4", height=650, width=600)

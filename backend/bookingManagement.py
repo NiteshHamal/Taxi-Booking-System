@@ -23,11 +23,13 @@ def insert(bookingInfo):
         del values, sql
         return result
 
+
 def customer_edit_booking(book):
-    conn=None
-    sql="""UPDATE booking SET pickup_address=%s, drop_address=%s, pickup_date=%s, pickup_time=%s WHERE bookingid=%s"""
-    values=(book.getPickup_Address(), book.getDrop_Address(), book.getPickup_Date(), book.getPickup_Time(), book.getBookingid())
-    updateResult=False
+    conn = None
+    sql = """UPDATE booking SET pickup_address=%s, drop_address=%s, pickup_date=%s, pickup_time=%s WHERE bookingid=%s"""
+    values = (book.getPickup_Address(), book.getDrop_Address(),
+              book.getPickup_Date(), book.getPickup_Time(), book.getBookingid())
+    updateResult = False
 
     try:
         conn = connect()
@@ -42,7 +44,6 @@ def customer_edit_booking(book):
     finally:
         del conn, values, sql
         return updateResult
-
 
 
 def requestBooking(requestb):

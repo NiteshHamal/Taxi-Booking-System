@@ -29,15 +29,16 @@ class CustomerDashboard():
         sidefont = ('Times New Roman', 15, 'normal')
 
         bookingid = Entry(self.root, text="", font=sidefont)
-        cid_txt=Entry(self.root)
+        cid_txt = Entry(self.root)
         cid_txt.insert(0, Global.currentUser[0])
 
         # -----------------------------------Top Frame---------------------------------------------
         upframe = Frame(self.root, height=100, bg="#4CD964")
         upframe.pack(side=TOP, fill=BOTH)
 
-        #-----------------------------------------Top frame title label----------------------------------------
-        titlelabel = Label(self.root, text="Welcome {}".format(Global.currentUser[1]), bg="#4CD964", font=('Times New Roman', 25, 'bold'))
+        # -----------------------------------------Top frame title label----------------------------------------
+        titlelabel = Label(self.root, text="Welcome {}".format(
+            Global.currentUser[1]), bg="#4CD964", font=('Times New Roman', 25, 'bold'))
         titlelabel.place(x=20, y=30)
 
         # ----------------------------------Side Frame-------------------------------------------------
@@ -45,22 +46,25 @@ class CustomerDashboard():
         sideframe.pack(side=LEFT, fill=BOTH)
 
         # --------------------------------------Side Frame Image--------------------------------------------
-        image = Image.open("H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Order ride-bro.png")
+        image = Image.open(
+            "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\Order ride-bro.png")
         image = image.resize((250, 250))
         image = ImageTk.PhotoImage(image)
         Image_Label = Label(sideframe, image=image, bg='#e2f3f5')
         Image_Label.image = image
         Image_Label.place(x=60, y=20)
 
-        #---------------------------------Side Title Label--------------------------------------------
-        titlelbl = Label(sideframe, text="Taxi Booking System",bg='#e2f3f5', font=('Times New Roman', 16, 'bold'))
+        # ---------------------------------Side Title Label--------------------------------------------
+        titlelbl = Label(sideframe, text="Taxi Booking System",
+                         bg='#e2f3f5', font=('Times New Roman', 16, 'bold'))
         titlelbl.place(x=90, y=270)
 
-        PROFILEBTN = Button(sideframe, text="My Profile",font=sidefont, bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        PROFILEBTN.place(x=100, y=350)
+        profilebtn = Button(sideframe, text="My Profile", font=sidefont,
+                            bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        profilebtn.place(x=100, y=350)
 
         profileupdatebtn = Button(sideframe, text="Update Profile", font=sidefont, bg='#e2f3f5',
-                             highlightthickness=0, borderwidth=0)
+                                  highlightthickness=0, borderwidth=0)
         profileupdatebtn.place(x=90, y=400)
 
         def changepassword_gui():
@@ -101,7 +105,8 @@ class CustomerDashboard():
                 confirmpassword = confirmpasswordtxt.get()
 
                 if newpassword == confirmpassword:
-                    password = Customer(cid=cid_txt.get(),password=confirmpassword)
+                    password = Customer(cid=cid_txt.get(),
+                                        password=confirmpassword)
                     result = customer_change_password(password)
                     if result == True:
                         messagebox.showinfo(
@@ -118,12 +123,14 @@ class CustomerDashboard():
                     messagebox.showwarning(
                         "TBS", "The new password and confirm password does not matched!")
 
-            changepasswordbtn = Button(labelframe,command=changepassword, text="Change Password", font=('Times New Roman', 14))
+            changepasswordbtn = Button(
+                labelframe, command=changepassword, text="Change Password", font=('Times New Roman', 14))
             changepasswordbtn.place(x=180, y=150)
 
             password.mainloop()
 
-        passwordbtn = Button(sideframe, command=changepassword_gui, text="Change Password",font=sidefont, bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        passwordbtn = Button(sideframe, command=changepassword_gui, text="Change Password",
+                             font=sidefont, bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         passwordbtn.place(x=80, y=450)
 
         def logout720():
@@ -132,26 +139,30 @@ class CustomerDashboard():
             obj = signin.TaxiLogin(root1)
             root1.mainloop()
 
-        logoutbtn = Button(sideframe, text="Logout", command=logout720,font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        logoutbtn = Button(sideframe, text="Logout", command=logout720,
+                           font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         logoutbtn.place(x=120, y=500)
 
         def exit():
             sys.exit()
 
-        exitbtn = Button(sideframe, text="Exit", font=sidefont, command=exit,bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+        exitbtn = Button(sideframe, text="Exit", font=sidefont, command=exit,
+                         bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         exitbtn.place(x=130, y=550)
 
-        #--------------------------------------Booking Form Frame-------------------------------------------
+        # --------------------------------------Booking Form Frame-------------------------------------------
         formframe = Frame(self.root, height=250, bg='#ffffff')
         formframe.pack(side=TOP, fill=BOTH)
 
-        paddress_frame = LabelFrame(formframe, text='Pickup Address', font=sidefont)
+        paddress_frame = LabelFrame(
+            formframe, text='Pickup Address', font=sidefont)
         paddress_frame.place(x=50, y=40)
 
         paddress_txt = Entry(paddress_frame, font=sidefont)
         paddress_txt.pack()
 
-        daddress_label = LabelFrame(formframe, text="Drop Address", font=sidefont)
+        daddress_label = LabelFrame(
+            formframe, text="Drop Address", font=sidefont)
         daddress_label.place(x=350, y=40)
 
         daddress_txt1 = Entry(daddress_label, font=sidefont)
@@ -160,7 +171,7 @@ class CustomerDashboard():
         date_label = LabelFrame(formframe, text="Pickup Date", font=sidefont)
         date_label.place(x=50, y=150)
 
-        dt=date.today()
+        dt = date.today()
         date_txt = DateEntry(date_label, font=sidefont, width=19, mindate=dt)
         date_txt.pack()
 
@@ -170,56 +181,58 @@ class CustomerDashboard():
         time_txt = Entry(time_label, font=sidefont)
         time_txt.pack()
 
-        bookingframe=LabelFrame(formframe,text="ACTION",bg='#e2f3f5', width=370, height=150)
+        bookingframe = LabelFrame(
+            formframe, text="ACTION", bg='#e2f3f5', width=370, height=150)
         bookingframe.place(x=700, y=40)
 
         def requestbooking():
 
-            if paddress_txt.get()=='' or daddress_txt1.get()=='' or date_txt.get()=='' or time_txt.get()=='':
-                messagebox.showwarning("Taxi Booking System","Please enter data in all the fields")
+            if paddress_txt.get() == '' or daddress_txt1.get() == '' or date_txt.get() == '' or time_txt.get() == '':
+                messagebox.showwarning(
+                    "Taxi Booking System", "Please enter data in all the fields")
 
             else:
                 requestbooking = Booking(bookingid='', pickup_address=paddress_txt.get(),
                                          drop_address=daddress_txt1.get(
-                                         ), pickup_date=date_txt.get(), pickup_time=time_txt.get(), status="Pending",
-                                         cid=cid_txt.get())
+                ), pickup_date=date_txt.get(), pickup_time=time_txt.get(), status="Pending",
+                    cid=cid_txt.get())
                 result = insert(requestbooking)
                 if result == True:
                     msg1 = messagebox.showinfo(
                         "Taxi Booking System", "Booking Request Successful")
-                    pendingbookingtable.delete(*pendingbookingtable.get_children())
-                    historybookingtable.delete(*historybookingtable.get_children())
+                    pendingbookingtable.delete(
+                        *pendingbookingtable.get_children())
+                    historybookingtable.delete(
+                        *historybookingtable.get_children())
                     cusdas()
                     history()
-
 
                 else:
                     msg2 = messagebox.showerror(
                         "Taxi Booking System", "Error Occurred!")
 
-
-
-
-
-        savebtn = Button(bookingframe,text="Request Ride",command=requestbooking,  bg="#4CD964",fg="white", font=sidefont, relief=RAISED, bd=5)
+        savebtn = Button(bookingframe, text="Request Ride", command=requestbooking,
+                         bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         savebtn.place(x=20, y=10)
 
         def updatebooking111():
 
-            booking=Booking(bookingid=bookingid.get(), pickup_address=paddress_txt.get(), drop_address=daddress_txt1.get(), pickup_date=date_txt.get(), pickup_time=time_txt.get())
-            updateResult=customer_edit_booking(booking)
-            if updateResult==True:
-                messagebox.showinfo("Taxi Booking System","The booking request is updated")
+            booking = Booking(bookingid=bookingid.get(), pickup_address=paddress_txt.get(
+            ), drop_address=daddress_txt1.get(), pickup_date=date_txt.get(), pickup_time=time_txt.get())
+            updateResult = customer_edit_booking(booking)
+            if updateResult == True:
+                messagebox.showinfo("Taxi Booking System",
+                                    "The booking request is updated")
                 pendingbookingtable.delete(*pendingbookingtable.get_children())
                 historybookingtable.delete(*historybookingtable.get_children())
                 cusdas()
                 history()
 
             else:
-                messagebox.showerror("Taxi Booking System","Error")
+                messagebox.showerror("Taxi Booking System", "Error")
 
-
-        updatebtn = Button(bookingframe,command=updatebooking111, text="Update Booking",bg="#4CD964",fg="white", font=sidefont, relief=RAISED, bd=5)
+        updatebtn = Button(bookingframe, command=updatebooking111, text="Update Booking",
+                           bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         updatebtn.place(x=170, y=10)
 
         def cancelrides():
@@ -235,7 +248,8 @@ class CustomerDashboard():
                 msg2 = messagebox.showerror(
                     "Taxi Booking System", "Error Occurred!")
 
-        deletebtn = Button(bookingframe,command=cancelrides, text="Cancel Booking",bg="#4CD964",fg="white", font=sidefont, relief=RAISED, bd=5)
+        deletebtn = Button(bookingframe, command=cancelrides, text="Cancel Booking",
+                           bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         deletebtn.place(x=20, y=70)
 
         def clear():
@@ -244,7 +258,8 @@ class CustomerDashboard():
             date_txt.delete(0, END)
             time_txt.delete(0, END)
 
-        clearbtn = Button(bookingframe,command=clear, text="Clear",bg="#4CD964",fg="white", font=sidefont, relief=RAISED, bd=5)
+        clearbtn = Button(bookingframe, command=clear, text="Clear",
+                          bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         clearbtn.place(x=190, y=70)
 
         maintab = ttk.Notebook(self.root)
@@ -257,8 +272,10 @@ class CustomerDashboard():
         maintab.add(frame2, text="Booking History")
 
         pendingbookingtable = ttk.Treeview(frame1)
-        pendingbookingtable.pack(side=BOTTOM, fill=BOTH,expand=TRUE, pady=(10, 0))
-        pendingbookingtable['columns'] = ('bid', 'pickup', 'dropoff', 'date', 'time')
+        pendingbookingtable.pack(
+            side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10, 0))
+        pendingbookingtable['columns'] = (
+            'bid', 'pickup', 'dropoff', 'date', 'time')
         pendingbookingtable.column('#0', width=0, stretch=0)
         pendingbookingtable.column('bid', width=100, anchor=CENTER)
         pendingbookingtable.column('pickup', width=50, anchor=CENTER)
@@ -268,8 +285,10 @@ class CustomerDashboard():
 
         pendingbookingtable.heading('#0', text='', anchor=CENTER)
         pendingbookingtable.heading('bid', text='Booking ID', anchor=CENTER)
-        pendingbookingtable.heading('pickup', text='Pickup Address', anchor=CENTER)
-        pendingbookingtable.heading('dropoff', text='Dropoff Address', anchor=CENTER)
+        pendingbookingtable.heading(
+            'pickup', text='Pickup Address', anchor=CENTER)
+        pendingbookingtable.heading(
+            'dropoff', text='Dropoff Address', anchor=CENTER)
         pendingbookingtable.heading('date', text='Date', anchor=CENTER)
         pendingbookingtable.heading('time', text='Time', anchor=CENTER)
 
@@ -290,17 +309,24 @@ class CustomerDashboard():
 
             itemselect11 = pendingbookingtable.selection()[0]
 
-            bookingid.insert(0, pendingbookingtable.item(itemselect11)['values'][0])
-            paddress_txt.insert(0, pendingbookingtable.item(itemselect11)['values'][1])
-            daddress_txt1.insert(0, pendingbookingtable.item(itemselect11)['values'][2])
-            date_txt.insert(0, pendingbookingtable.item(itemselect11)['values'][3])
-            time_txt.insert(0, pendingbookingtable.item(itemselect11)['values'][4])
+            bookingid.insert(0, pendingbookingtable.item(
+                itemselect11)['values'][0])
+            paddress_txt.insert(0, pendingbookingtable.item(
+                itemselect11)['values'][1])
+            daddress_txt1.insert(
+                0, pendingbookingtable.item(itemselect11)['values'][2])
+            date_txt.insert(0, pendingbookingtable.item(
+                itemselect11)['values'][3])
+            time_txt.insert(0, pendingbookingtable.item(
+                itemselect11)['values'][4])
 
         pendingbookingtable.bind('<<TreeviewSelect>>', getbookingtabledata)
 
         historybookingtable = ttk.Treeview(frame2)
-        historybookingtable.pack(side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10, 0))
-        historybookingtable['columns'] = ('bid', 'pickup', 'dropoff', 'date', 'time')
+        historybookingtable.pack(
+            side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10, 0))
+        historybookingtable['columns'] = (
+            'bid', 'pickup', 'dropoff', 'date', 'time')
         historybookingtable.column('#0', width=0, stretch=0)
         historybookingtable.column('bid', width=100, anchor=CENTER)
         historybookingtable.column('pickup', width=50, anchor=CENTER)
@@ -310,8 +336,10 @@ class CustomerDashboard():
 
         historybookingtable.heading('#0', text='', anchor=CENTER)
         historybookingtable.heading('bid', text='Booking ID', anchor=CENTER)
-        historybookingtable.heading('pickup', text='Pickup Address', anchor=CENTER)
-        historybookingtable.heading('dropoff', text='Dropoff Address', anchor=CENTER)
+        historybookingtable.heading(
+            'pickup', text='Pickup Address', anchor=CENTER)
+        historybookingtable.heading(
+            'dropoff', text='Dropoff Address', anchor=CENTER)
         historybookingtable.heading('date', text='Date', anchor=CENTER)
         historybookingtable.heading('time', text='Time', anchor=CENTER)
 
@@ -341,8 +369,6 @@ class CustomerDashboard():
                         font=('Times New Roman', 16))
         style.map("Treeview.Heading",
                   )
-
-
 
 
 if __name__ == '__main__':
