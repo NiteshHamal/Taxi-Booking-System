@@ -6,7 +6,7 @@ from middleware.customer import Customer
 from backend.customerManagement import register
 
 
-class CustomerCRUD():
+class CustomerCRUD:
 
     def __init__(self, root):
         self.root = root
@@ -92,18 +92,20 @@ class CustomerCRUD():
 
         # function to add new customers ------------------------------------------------------------------
         def addCustomer():
-            customer = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
-                                number=mobiletxt.get(), password=passwordtxt.get(), payment=paymentcombo.get())
-            result = register(customer)
-            if result == True:
-                msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Customer Registration Successful")
-                treeview.delete(*treeview.get_children())
-                customerValue()
-
+            if (nametxt.get() == '') or (addresstxt.get() == '') or (emailtxt.get() == '') or (passwordtxt.get() == '') or (mobiletxt.get() == '') or (paymentcombo.get() == ''):
+                messagebox.showerror("Error", "Please Fill All The Fields")
             else:
-                msg2 = messagebox.showerror(
-                    "Taxi Booking System", "Error Occurred!")
+                customer = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
+                                    number=mobiletxt.get(), password=passwordtxt.get(), payment=paymentcombo.get())
+                result = register(customer)
+                if result == True:
+                    msg1 = messagebox.showinfo(
+                        "Taxi Booking System", "Customer Registration Successful")
+                    treeview.delete(*treeview.get_children())
+                    customerValue()
+                else:
+                    msg2 = messagebox.showerror(
+                        "Taxi Booking System", "Error Occurred!")
 
         savebtn = Button(formframe, text="  Save Record  ",
                          bg="#4CD964", font=font, command=addCustomer)
@@ -111,17 +113,21 @@ class CustomerCRUD():
 
         # function to edit or to update customer--------------------------------------------------------
         def editCustomer():
-            customer1 = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
-                                 number=mobiletxt.get(), payment=paymentcombo.get(), cid=cidtxt.get())
-            ecustomer = editCus(customer1)
-            if ecustomer == True:
-                msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Customer Edit Successful")
-                treeview.delete(*treeview.get_children())
-                customerValue()
+            if (nametxt.get() == '') or (addresstxt.get() == '') or (emailtxt.get() == '') or (mobiletxt.get() == '') or (paymentcombo.get() == ''):
+                messagebox.showerror(
+                    "Error", "Please Fill All The Fields Execpt Password Field")
             else:
-                msg2 = messagebox.showerror(
-                    "Taxi Booking System", "Error Occurred!")
+                customer1 = Customer(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
+                                     number=mobiletxt.get(), payment=paymentcombo.get(), cid=cidtxt.get())
+                ecustomer = editCus(customer1)
+                if ecustomer == True:
+                    msg1 = messagebox.showinfo(
+                        "Taxi Booking System", "Customer Edit Successful")
+                    treeview.delete(*treeview.get_children())
+                    customerValue()
+                else:
+                    msg2 = messagebox.showerror(
+                        "Taxi Booking System", "Error Occurred!")
 
         updatebtn = Button(formframe, text="Update Record",
                            bg="#4CD964", font=font, command=editCustomer)

@@ -178,3 +178,22 @@ def customerbookinghistory_table(cid):
     finally:
         del values, sql
         return historyResult
+
+
+def completetripbydriver(bid):
+    sql = """UPDATE booking SET status=%s WHERE bookingid=%s"""
+    values = (bid.getStatus(), bid.getBookingid())
+    completetripbydriverresult = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        completetripbydriverresult = True
+    except:
+        print('Error : ', sys.exc_info())
+    finally:
+        del values, sql
+        return completetripbydriverresult

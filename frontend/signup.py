@@ -1,4 +1,5 @@
 from tkinter import *
+from backend.validation import namevalidation, emailvalidation, numbervalidation, passwordvalidation
 from frontend import signin
 from PIL import ImageTk, Image
 from middleware.customer import Customer
@@ -30,32 +31,32 @@ class Registration:
         fullname_frame = LabelFrame(frame1, text="Full Name")
         fullname_frame.place(x=175, y=150)
 
-        fullname_txt = Entry(fullname_frame, text="",
+        fullname_txt = Entry(fullname_frame,
                              font=font2, relief=RAISED)
         fullname_txt.pack()
 
         address_frame = LabelFrame(frame1, text="Address")
         address_frame.place(x=175, y=200)
 
-        address = Entry(address_frame, text="", font=font2, relief=RAISED)
+        address = Entry(address_frame, font=font2, relief=RAISED)
         address.pack()
 
         email_frame = LabelFrame(frame1, text="Email")
         email_frame.place(x=175, y=250)
 
-        email = Entry(email_frame, text="", font=font2, relief=RAISED)
+        email = Entry(email_frame, font=font2, relief=RAISED)
         email.pack()
 
         number_frame = LabelFrame(frame1, text="Phone Number")
         number_frame.place(x=175, y=300)
 
-        number = Entry(number_frame, text="", font=font2, relief=RAISED)
+        number = Entry(number_frame, font=font2, relief=RAISED)
         number.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
         password_frame.place(x=175, y=350)
 
-        password = Entry(password_frame, text="", font=font2, relief=RAISED)
+        password = Entry(password_frame, font=font2, relief=RAISED)
         password.pack()
 
         payment_frame = LabelFrame(frame1, text="Payment Method")
@@ -66,16 +67,36 @@ class Registration:
         payment.pack()
 
         def saveInfo():
-            customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(),
-                                number=number.get(), password=password.get(), payment=payment.get())
-            result = register(customer)
-            if result == True:
-                msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Customer Registration Successful")
-
+            if (fullname_txt.get() == '') or (address.get() == '') or (email.get() == '') or (number.get() == '') or (password.get() == '') or (payment.get() == ''):
+                messagebox.showerror('Error', 'Please Fill All the Fields')
             else:
-                msg2 = messagebox.showerror(
-                    "Taxi Booking System", "Error Occurred!")
+                nameResult = namevalidation(fullname_txt.get())
+                if nameResult == True:
+                    emailResult = emailvalidation(email.get())
+                    if emailResult == True:
+                        numberResult = numbervalidation(number.get())
+                        if numberResult == True:
+                            passwordResult = passwordvalidation(password.get())
+                            if passwordResult == True:
+                                customer = Customer(fullname=fullname_txt.get(), address=address.get(), email=email.get(),
+                                                    number=number.get(), password=password.get(), payment=payment.get())
+                                result = register(customer)
+                                if result == True:
+                                    messagebox.showinfo(
+                                        "Taxi Booking System", "Customer Registration Successful")
+                                else:
+                                    messagebox.showerror(
+                                        "Taxi Booking System", "Error Occurred!")
+                            else:
+                                messagebox.showerror(
+                                    'Password Error', 'Invalid password(Minimum eight characters-at least one uppercase,one lowercase, one number and one special character)')
+                        else:
+                            messagebox.showerror(
+                                "Error ", 'Invalid Mobile Number(+977 is compulsary)')
+                    else:
+                        messagebox.showerror('Error ', 'Invalid Email')
+                else:
+                    messagebox.showerror('Error', 'Invalid Name')
 
         btn_signin = Button(frame1, text="Submit", font=font3,
                             relief=GROOVE, command=saveInfo, bg="#4CD964", fg="#EFEFF4")

@@ -7,7 +7,7 @@ def add(driverInfo):
     sql = """INSERT INTO driver VALUES(%s,%s,%s,%s,%s,%s,%s)"""
     values = (driverInfo.getDid(), driverInfo.getFullname(), driverInfo.getAddress(
     ), driverInfo.getEmail(), driverInfo.getLicenseno(), driverInfo.getStatus(), driverInfo.getPassword())
-    result = True
+    result = False
     try:
         conn = connect()
         cursor = conn.cursor()
@@ -15,6 +15,7 @@ def add(driverInfo):
         conn.commit()
         cursor.close()
         conn.close()
+        result = True
     except:
         print("Error : ", sys.exc_info())
     finally:
@@ -150,28 +151,51 @@ def drivertablead():
         return driverad
 
 
-def upcoming_trip(cusname):
-    sql = """"""
-    request = None
+def driver_booking_table(did):
+    sql = """select booking.bookingid, customer.fullname, customer.number, booking.pickup_address, booking.drop_address,
+     booking.pickup_date, booking.pickup_time, booking.status from booking left join customer on booking.cid = customer.cid 
+     where not booking.status='Pending' and booking.did=%s order by booking.status desc"""
+    values = (did,)
+    result = None
     try:
         conn = connect()
         cursor = conn.cursor()
-        cursor.execute(sql)
-        request = cursor.fetchall()
+        cursor.execute(sql, values)
+        result = cursor.fetchall()
         cursor.close()
         conn.close()
     except:
+        print("Error", sys.exc_info())
+    finally:
+        del sql, conn
+        return result
+
+
+def driver_change_password(didInfo):
+    sql = """UPDATE driver SET password=%s WHERE did=%s"""
+    values = (didInfo.getPassword(), didInfo.getDid())
+    result = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        result = True
+    except:
         print("Error : ", sys.exc_info())
     finally:
-        del sql
-        return request
+        del values, sql
+        return result
 
 
-def driver_booking_table():
-    conn = None
-    sql = """select booking.bookingid, customer.fullname, customer.number, booking.pickup_address, 
-    booking.drop_address, booking.pickup_date, booking.pickup_time, booking.status from booking 
-    left join customer on booking.cid = customer.cid where not booking.status='Pending' order by booking.status desc"""
+def driver_search_booking_table(fullname):
+    sql = """select booking.bookingid, customer.fullname, customer.number, booking.pickup_address, booking.drop_address, 
+    booking.pickup_date, booking.pickup_time, booking.status from booking left join customer on booking.cid = customer.cid 
+    where not booking.status='Pending' and (customer.fullname like '%{}%' or booking.pickup_address like '%{}%' or 
+    booking.drop_address like '%{}%') 
+    order by booking.status desc""".format(fullname, fullname, fullname)
     result = None
     try:
         conn = connect()
@@ -180,28 +204,8 @@ def driver_booking_table():
         result = cursor.fetchall()
         cursor.close()
         conn.close()
-
     except:
         print("Error", sys.exc_info())
-
     finally:
-        del sql, conn
+        del sql
         return result
-
-# def driver_update_booking(didInfo):
-#     sql = """UPDATE driver SET status=%s WHERE did = %s"""
-#     values = (didInfo.getStatus(), didInfo.getDid())
-#     result = False
-#     try:
-#         conn = connect()
-#         cursor = conn.cursor()
-#         cursor.execute(sql, values)
-#         conn.commit()
-#         cursor.close()
-#         conn.close()
-#         result = True
-#     except:
-#         print("Error : ", sys.exc_info())
-#     finally:
-#         del values, sql
-#         return result

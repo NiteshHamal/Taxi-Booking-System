@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import frontend.signup
-from frontend import admindashboard, customerdashboard
-from frontend.driverDashboard import DriverDashboard
+from frontend import admindashboard, customerdashboard, driverdashboard
 from backend.loginManagement import *
 from middleware.customer import Customer
 from middleware.driver import Driver
@@ -10,7 +9,7 @@ from middleware.admin import Admin
 from middleware import Global
 
 
-class TaxiLogin():
+class TaxiLogin:
 
     def __init__(self, root):
         self.root = root
@@ -62,7 +61,7 @@ class TaxiLogin():
                     Global.currentDriver = duser
                     self.root.destroy()
                     root = Tk()
-                    frontend.driverDashboard.DriverDashboard(root)
+                    driverdashboard.DriverDashboard(root)
                     root.mainloop()
 
                 elif auser != None:
@@ -87,16 +86,16 @@ class TaxiLogin():
         email_frame = LabelFrame(frame1, text="Email")
         email_frame.place(x=175, y=250)
 
-        email_txt = Entry(email_frame, text="", font=font2, relief=RAISED)
-        email_txt.insert(0, 'nitesh@gmail.com')
+        email_txt = Entry(email_frame, font=font2, relief=RAISED)
+        email_txt.insert(0, 'nitesh0hamal@gmail.com')
         email_txt.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
         password_frame.place(x=175, y=300)
 
-        password11 = Entry(password_frame, text="",
+        password11 = Entry(password_frame,
                            font=font2, relief=RAISED, show='*')
-        password11.insert(0, 'hello')
+        password11.insert(0, '1234')
         password11.pack()
 
         btn_signin = Button(frame1, text="Submit", font=font3,

@@ -15,7 +15,7 @@ from middleware.booking import Booking
 from middleware.driver import Driver
 
 
-class AdminDashboard():
+class AdminDashboard:
     def __init__(self, main):
         self.main = main
         self.main.title("Admin Dashboard")
@@ -83,42 +83,54 @@ class AdminDashboard():
                 assigndriverframe, text="Booking ID", font=sidefont)
             bid_frame.place(x=10, y=10)
 
-            bid_txt = Entry(bid_frame, text="", font=sidefont)
+            bid_txt = Entry(bid_frame, font=sidefont)
+            bid_txt.bind("<Key>", lambda e: "break")
+            bid_txt.bind("<Button-1>", lambda e: "break")
             bid_txt.pack()
 
             paddress_frame = LabelFrame(
                 assigndriverframe, text='Pickup Address', font=sidefont)
             paddress_frame.place(x=310, y=10)
 
-            paddress_txt = Entry(paddress_frame, text='', font=sidefont)
+            paddress_txt = Entry(paddress_frame, font=sidefont)
+            paddress_txt.bind("<Key>", lambda e: "break")
+            paddress_txt.bind("<Button-1>", lambda e: "break")
             paddress_txt.pack()
 
             daddress_label = LabelFrame(
                 assigndriverframe, text="Drop Address", font=sidefont)
             daddress_label.place(x=610, y=10)
 
-            daddress_txt1 = Entry(daddress_label, text='', font=sidefont)
+            daddress_txt1 = Entry(daddress_label, font=sidefont)
+            daddress_txt1.bind("<Key>", lambda e: "break")
+            daddress_txt1.bind("<Button-1>", lambda e: "break")
             daddress_txt1.pack()
 
             date_label = LabelFrame(
                 assigndriverframe, text="Pickup Date", font=sidefont)
             date_label.place(x=10, y=120)
 
-            date_txt = Entry(date_label, text='', font=sidefont)
+            date_txt = Entry(date_label, font=sidefont)
+            date_txt.bind("<Key>", lambda e: "break")
+            date_txt.bind("<Button-1>", lambda e: "break")
             date_txt.pack()
 
             time_label = LabelFrame(
                 assigndriverframe, text="Pickup Time", font=sidefont)
             time_label.place(x=310, y=120)
 
-            time_txt = Entry(time_label, text='', font=sidefont)
+            time_txt = Entry(time_label, font=sidefont)
+            time_txt.bind("<Key>", lambda e: "break")
+            time_txt.bind("<Button-1>", lambda e: "break")
             time_txt.pack()
 
             driver_label = LabelFrame(
                 assigndriverframe, text='Assign Driver', font=sidefont)
             driver_label.place(x=610, y=120)
 
-            driver_txt = Entry(driver_label, text='', font=sidefont)
+            driver_txt = Entry(driver_label, font=sidefont)
+            driver_txt.bind("<Key>", lambda e: "break")
+            driver_txt.bind("<Button-1>", lambda e: "break")
             driver_txt.pack()
 
             def drivercheck():
@@ -171,11 +183,11 @@ class AdminDashboard():
             check_btn.place(x=900, y=20)
 
             def confirm_booking():
-
+                if (bid_txt.get() == '') or (paddress_txt.get() == '') or (daddress_txt1.get() == '') or (date_txt.get() == '') or (time_txt.get() == ''):
+                    messagebox.showerror("Error", "Please Fill All Field")
                 if driver_txt.get() == '':
                     messagebox.showwarning("TBS", "Please enter driver ID")
                     root.destroy()
-
                 else:
                     booking = Booking(bookingid=bid_txt.get(),
                                       did=driver_txt.get(), status='Confirmed')
@@ -183,20 +195,19 @@ class AdminDashboard():
                     driver = Driver(did=driver_txt.get(), status="Inactive")
                     result = statusUpdate(driver)
                     driver_txt.delete(0, END)
-                if updateResult == True:
-                    messagebox.showinfo(
-                        "TBS", "The driver is assigned successfully")
-                    requestTable.delete(*requestTable.get_children())
-                    requesttable()
-                    historytable.delete(*historytable.get_children())
-                    driverValue()
-                    activebookingtable.delete(
-                        *activebookingtable.get_children())
-                    activebooking123()
-                    root.destroy()
-
-                else:
-                    messagebox.showerror("TBS", "Error")
+                    if updateResult == True:
+                        messagebox.showinfo(
+                            "TBS", "The driver is assigned successfully")
+                        requestTable.delete(*requestTable.get_children())
+                        requesttable()
+                        historytable.delete(*historytable.get_children())
+                        driverValue()
+                        activebookingtable.delete(
+                            *activebookingtable.get_children())
+                        activebooking123()
+                        root.destroy()
+                    else:
+                        messagebox.showerror("TBS", "Error")
 
             confirm_btn = Button(assigndriverframe, text="Confirm Booking",
                                  command=confirm_booking, font=sidefont, relief=RAISED, bd=5)
@@ -323,27 +334,27 @@ class AdminDashboard():
             confirmpasswordtxt.place(x=180, y=90)
 
             def changepassword():
-                newpassword = newpasswordtxt.get()
-                confirmpassword = confirmpasswordtxt.get()
-
-                if newpassword == confirmpassword:
-                    password = Admin(adminid=adminid.get(),
-                                     password=confirmpassword)
-                    result = admin_change_password(password)
-                    if result == True:
-                        messagebox.showinfo(
-                            "TBS", "The password is changed successfully")
-                        self.main.destroy()
-                        root = Tk()
-                        signin.TaxiLogin(root)
-                        root.mainloop()
-
-                    else:
-                        messagebox.showerror("TBS", "Error Occurred!")
-
+                if (newpasswordtxt.get() == '') or (confirmpasswordtxt.get() == ''):
+                    messagebox.showerror('Error', 'Please Fill All the Fields')
                 else:
-                    messagebox.showwarning(
-                        "TBS", "The new password and confirm password does not matched!")
+                    newpassword = newpasswordtxt.get()
+                    confirmpassword = confirmpasswordtxt.get()
+                    if newpassword == confirmpassword:
+                        password = Admin(adminid=adminid.get(),
+                                         password=confirmpassword)
+                        result = admin_change_password(password)
+                        if result == True:
+                            messagebox.showinfo(
+                                "TBS", "The password is changed successfully")
+                            self.main.destroy()
+                            root = Tk()
+                            signin.TaxiLogin(root)
+                            root.mainloop()
+                        else:
+                            messagebox.showerror("TBS", "Error Occurred!")
+                    else:
+                        messagebox.showwarning(
+                            "TBS", "The new password and confirm password does not matched!")
 
             changepasswordbtn = Button(
                 labelframe, command=changepassword, text="Change Password", font=('Times New Roman', 14))

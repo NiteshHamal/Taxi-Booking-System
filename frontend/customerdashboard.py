@@ -4,19 +4,19 @@ from datetime import date
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import messagebox, ttk
-
 from tkcalendar import DateEntry
-
 from backend.bookingManagement import insert, cusdastable, customerbookinghistory_table, cancelreqBooking, \
     customer_edit_booking
-from backend.customerManagement import customer_change_password
+from backend.customerManagement import customer_change_password, editCus
+from backend.validation import namevalidation, emailvalidation, numbervalidation, passwordvalidation, \
+    timevalidation
 from frontend import signin
 from middleware import Global
 from middleware.booking import Booking
 from middleware.customer import Customer
 
 
-class CustomerDashboard():
+class CustomerDashboard:
     def __init__(self, root):
         self.root = root
         self.root.title("Customer Dashboard")
@@ -59,12 +59,234 @@ class CustomerDashboard():
                          bg='#e2f3f5', font=('Times New Roman', 16, 'bold'))
         titlelbl.place(x=90, y=270)
 
+        def profile_gui():
+            updateprofile = tkinter.Toplevel()
+            updateprofile.title("Profile")
+            updateprofile.resizable(False, False)
+            updateprofile.config(background='#e2f3f5')
+            width = 670
+            height = 400
+            screenwidth = updateprofile.winfo_screenwidth()
+            screenheight = updateprofile.winfo_screenheight()
+            xCordinate = int((screenwidth / 2) - (width / 2))
+            yCordinate = int((screenheight / 2) - (height / 2))
+            updateprofile.geometry('{}x{}+{}+{}'.format(width,
+                                                        height, xCordinate, yCordinate))
+
+            # image
+            profile = ImageTk.PhotoImage(Image.open(
+                "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\profile.png"))
+            profile_label = Label(updateprofile, image=profile, bg="#e2f3f5")
+            profile_label.image = profile
+            profile_label.place(x=270, y=20)
+
+            # widgets on profile Top level
+
+            # right column---------------------------------------------
+
+            # label-------------
+
+            profile_cid_lbl = Label(
+                updateprofile, text='ID No: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_cid_lbl.place(x=20, y=200)
+
+            profile_address_lbl = Label(
+                updateprofile, text='Address: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_address_lbl.place(x=20, y=250)
+
+            profile_number_lbl = Label(
+                updateprofile, text='Number: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_number_lbl.place(x=20, y=300)
+
+            # entry--------------
+            profile_cid_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_cid_txt.insert(0, Global.currentUser[0])
+            profile_cid_txt.bind("<Key>", lambda e: "break")
+            profile_cid_txt.bind("<Button-1>", lambda e: "break")
+            profile_cid_txt.place(x=100, y=200)
+
+            profile_address_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_address_txt.insert(0, Global.currentUser[2])
+            profile_address_txt.bind("<Key>", lambda e: "break")
+            profile_address_txt.bind("<Button-1>", lambda e: "break")
+            profile_address_txt.place(x=100, y=250)
+
+            profile_number_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_number_txt.insert(0, Global.currentUser[4])
+            profile_number_txt.bind("<Key>", lambda e: "break")
+            profile_number_txt.bind("<Button-1>", lambda e: "break")
+            profile_number_txt.place(x=100, y=300)
+
+            # left column-------------------------------------------------------------
+
+            # label--------------------------------
+            profile_name_lbl = Label(
+                updateprofile, text='Name: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_name_lbl.place(x=380, y=200)
+
+            profile_email_lbl = Label(
+                updateprofile, text='Email: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_email_lbl.place(x=380, y=250)
+
+            profile_payment_lbl = Label(
+                updateprofile, text='Payment: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_payment_lbl.place(x=380, y=300)
+
+            # entry------------------------------
+            profile_name_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_name_txt.insert(0, Global.currentUser[1])
+            profile_name_txt.bind("<Key>", lambda e: "break")
+            profile_name_txt.bind("<Button-1>", lambda e: "break")
+            profile_name_txt.place(x=460, y=200)
+
+            profile_email_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_email_txt.insert(0, Global.currentUser[3])
+            profile_email_txt.bind("<Key>", lambda e: "break")
+            profile_email_txt.bind("<Button-1>", lambda e: "break")
+            profile_email_txt.place(x=460, y=250)
+
+            profile_payment_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_payment_txt.insert(0, Global.currentUser[6])
+            profile_payment_txt.bind("<Key>", lambda e: "break")
+            profile_payment_txt.bind("<Button-1>", lambda e: "break")
+            profile_payment_txt.place(x=460, y=300)
+
         profilebtn = Button(sideframe, text="My Profile", font=sidefont,
-                            bg='#e2f3f5', highlightthickness=0, borderwidth=0)
+                            bg='#e2f3f5', highlightthickness=0, borderwidth=0, command=profile_gui)
         profilebtn.place(x=100, y=350)
 
+        def updateprofile_gui():
+            updateprofile = tkinter.Toplevel()
+            updateprofile.title("Update Profile")
+            updateprofile.resizable(False, False)
+            updateprofile.config(background='#e2f3f5')
+            width = 670
+            height = 400
+            screenwidth = updateprofile.winfo_screenwidth()
+            screenheight = updateprofile.winfo_screenheight()
+            xCordinate = int((screenwidth / 2) - (width / 2))
+            yCordinate = int((screenheight / 2) - (height / 2))
+            updateprofile.geometry('{}x{}+{}+{}'.format(width,
+                                                        height, xCordinate, yCordinate))
+
+            # image
+            profile = ImageTk.PhotoImage(Image.open(
+                "H:\\College\\Sem-2\\python assignment\\Taxi Booking System\\image\\profile.png"))
+            profile_label = Label(updateprofile, image=profile, bg="#e2f3f5")
+            profile_label.image = profile
+            profile_label.place(x=270, y=20)
+
+            # widgets on updateprofile Top level
+
+            # right column---------------------------------------------
+
+            # label-------------
+
+            profile_cid_lbl = Label(
+                updateprofile, text='ID No: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_cid_lbl.place(x=20, y=200)
+
+            profile_address_lbl = Label(
+                updateprofile, text='Address: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_address_lbl.place(x=20, y=250)
+
+            profile_number_lbl = Label(
+                updateprofile, text='Number: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_number_lbl.place(x=20, y=300)
+
+            # entry--------------
+            profile_cid_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_cid_txt.insert(0, Global.currentUser[0])
+            profile_cid_txt.bind("<Key>", lambda e: "break")
+            profile_cid_txt.bind("<Button-1>", lambda e: "break")
+            profile_cid_txt.place(x=100, y=200)
+
+            profile_address_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_address_txt.insert(0, Global.currentUser[2])
+            profile_address_txt.place(x=100, y=250)
+
+            profile_number_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_number_txt.insert(0, Global.currentUser[4])
+            profile_number_txt.place(x=100, y=300)
+
+            # left column-------------------------------------------------------------
+
+            # label--------------------------------
+            profile_name_lbl = Label(
+                updateprofile, text='Name: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_name_lbl.place(x=380, y=200)
+
+            profile_email_lbl = Label(
+                updateprofile, text='Email: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_email_lbl.place(x=380, y=250)
+
+            profile_payment_lbl = Label(
+                updateprofile, text='Payment: ', bg='#e2f3f5', font=('Times New Roman', 14))
+            profile_payment_lbl.place(x=380, y=300)
+
+            # entry------------------------------
+            profile_name_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_name_txt.insert(0, Global.currentUser[1])
+            profile_name_txt.place(x=460, y=200)
+
+            profile_email_txt = Entry(
+                updateprofile, font=('Times New Roman', 14))
+            profile_email_txt.insert(0, Global.currentUser[3])
+            profile_email_txt.place(x=460, y=250)
+
+            profile_payment_txt = ttk.Combobox(
+                updateprofile, font=('Times New Roman', 14))
+            profile_payment_txt['values'] = ('Cash', 'Online')
+            profile_payment_txt.insert(0, Global.currentUser[6])
+            profile_payment_txt.place(x=460, y=300)
+
+            def profile_updatebtnfunction():
+                if (profile_name_txt.get() == '') or (profile_address_txt.get() == '') or (profile_email_txt == '') or (profile_email_txt == '') or (profile_number_txt == '') or (profile_payment_txt == ''):
+                    messagebox.showerror("Error", 'Please Fill All The Fields')
+                else:
+                    nameResult = namevalidation(profile_name_txt.get())
+                    if nameResult == True:
+                        emailResult = emailvalidation(profile_email_txt.get())
+                        if emailResult == True:
+                            numberResult = numbervalidation(
+                                profile_number_txt.get())
+                            if numberResult == True:
+                                profile_update1 = Customer(cid=Global.currentUser[0], fullname=profile_name_txt.get(),
+                                                           address=profile_address_txt.get(),
+                                                           email=profile_email_txt.get(),
+                                                           number=profile_number_txt.get(),
+                                                           payment=profile_payment_txt.get())
+                                ecustomer = editCus(profile_update1)
+                                if ecustomer == True:
+                                    messagebox.showinfo(
+                                        "Taxi Booking System", 'Profile Update Successfully!')
+                                else:
+                                    messagebox.showerror(
+                                        'Taxi Booking System', 'Error Occurred!')
+                            else:
+                                messagebox.showerror(
+                                    "Error ", 'Invalid Mobile Number(+977 is compulsary)')
+                        else:
+                            messagebox.showerror('Error ', 'Invalid Email')
+                    else:
+                        messagebox.showerror('Error', 'Invalid Name')
+
+            profile_updatebtn = Button(
+                updateprofile, text='Update', bg='#4CD964', font=sidefont, command=profile_updatebtnfunction)
+            profile_updatebtn.place(x=290, y=350)
+
         profileupdatebtn = Button(sideframe, text="Update Profile", font=sidefont, bg='#e2f3f5',
-                                  highlightthickness=0, borderwidth=0)
+                                  highlightthickness=0, borderwidth=0, command=updateprofile_gui)
         profileupdatebtn.place(x=90, y=400)
 
         def changepassword_gui():
@@ -101,27 +323,36 @@ class CustomerDashboard():
             confirmpasswordtxt.place(x=180, y=90)
 
             def changepassword():
-                newpassword = newpasswordtxt.get()
-                confirmpassword = confirmpasswordtxt.get()
-
-                if newpassword == confirmpassword:
-                    password = Customer(cid=cid_txt.get(),
-                                        password=confirmpassword)
-                    result = customer_change_password(password)
-                    if result == True:
-                        messagebox.showinfo(
-                            "TBS", "The password is changed successfully")
-                        self.root.destroy()
-                        root = Tk()
-                        signin.TaxiLogin(root)
-                        root.mainloop()
-
-                    else:
-                        messagebox.showerror("TBS", "Error Occurred!")
-
+                if (newpasswordtxt.get() == '') or (confirmpasswordtxt.get() == ''):
+                    messagebox.showerror('Error', 'Please Fill All the Fields')
                 else:
-                    messagebox.showwarning(
-                        "TBS", "The new password and confirm password does not matched!")
+                    passwordResult = passwordvalidation(newpasswordtxt.get())
+                    if passwordResult == True:
+                        passwordResult2 = passwordvalidation(
+                            confirmpasswordtxt.get())
+                        if passwordResult2 == True:
+                            newpassword = newpasswordtxt.get()
+                            confirmpassword = confirmpasswordtxt.get()
+                            if newpassword == confirmpassword:
+                                password = Customer(
+                                    cid=cid_txt.get(), password=confirmpassword)
+                                result = customer_change_password(password)
+                                if result == True:
+                                    messagebox.showinfo(
+                                        "TBS", "The password is changed successfully")
+                                    self.root.destroy()
+                                    root = Tk()
+                                    signin.TaxiLogin(root)
+                                    root.mainloop()
+                                else:
+                                    messagebox.showerror(
+                                        "TBS", "Error Occurred!")
+                            else:
+                                messagebox.showwarning(
+                                    "TBS", "The new password and confirm password does not matched!")
+                    else:
+                        messagebox.showerror(
+                            'Error', 'Invalid password(Minimum eight characters-at least one uppercase,one lowercase, one number and one special character)')
 
             changepasswordbtn = Button(
                 labelframe, command=changepassword, text="Change Password", font=('Times New Roman', 14))
@@ -186,67 +417,87 @@ class CustomerDashboard():
         bookingframe.place(x=700, y=40)
 
         def requestbooking():
-
             if paddress_txt.get() == '' or daddress_txt1.get() == '' or date_txt.get() == '' or time_txt.get() == '':
                 messagebox.showwarning(
                     "Taxi Booking System", "Please enter data in all the fields")
-
             else:
-                requestbooking = Booking(bookingid='', pickup_address=paddress_txt.get(),
-                                         drop_address=daddress_txt1.get(
-                ), pickup_date=date_txt.get(), pickup_time=time_txt.get(), status="Pending",
-                    cid=cid_txt.get())
-                result = insert(requestbooking)
-                if result == True:
-                    msg1 = messagebox.showinfo(
-                        "Taxi Booking System", "Booking Request Successful")
-                    pendingbookingtable.delete(
-                        *pendingbookingtable.get_children())
-                    historybookingtable.delete(
-                        *historybookingtable.get_children())
-                    cusdas()
-                    history()
-
+                timeResult = timevalidation(time_txt.get())
+                if timeResult == True:
+                    requestbooking = Booking(bookingid='', pickup_address=paddress_txt.get(),
+                                             drop_address=daddress_txt1.get(
+                    ), pickup_date=date_txt.get(), pickup_time=time_txt.get(),
+                        status="Pending",
+                        cid=cid_txt.get())
+                    result = insert(requestbooking)
+                    if result == True:
+                        messagebox.showinfo(
+                            "Taxi Booking System", "Booking Request Successful")
+                        pendingbookingtable.delete(
+                            *pendingbookingtable.get_children())
+                        historybookingtable.delete(
+                            *historybookingtable.get_children())
+                        cusdas()
+                        history()
+                    else:
+                        messagebox.showerror(
+                            "Taxi Booking System", "Error Occurred!")
                 else:
-                    msg2 = messagebox.showerror(
-                        "Taxi Booking System", "Error Occurred!")
+                    messagebox.showerror("Error", "Time is not Valid!")
 
         savebtn = Button(bookingframe, text="Request Ride", command=requestbooking,
                          bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         savebtn.place(x=20, y=10)
 
         def updatebooking111():
-
-            booking = Booking(bookingid=bookingid.get(), pickup_address=paddress_txt.get(
-            ), drop_address=daddress_txt1.get(), pickup_date=date_txt.get(), pickup_time=time_txt.get())
-            updateResult = customer_edit_booking(booking)
-            if updateResult == True:
-                messagebox.showinfo("Taxi Booking System",
-                                    "The booking request is updated")
-                pendingbookingtable.delete(*pendingbookingtable.get_children())
-                historybookingtable.delete(*historybookingtable.get_children())
-                cusdas()
-                history()
-
+            if paddress_txt.get() == '' or daddress_txt1.get() == '' or date_txt.get() == '' or time_txt.get() == '':
+                messagebox.showwarning(
+                    "Taxi Booking System", "Please enter data in all the fields")
             else:
-                messagebox.showerror("Taxi Booking System", "Error")
+                timeResult = timevalidation(time_txt.get())
+                if timeResult == True:
+                    booking = Booking(bookingid=bookingid.get(), pickup_address=paddress_txt.get(
+                    ), drop_address=daddress_txt1.get(), pickup_date=date_txt.get(), pickup_time=time_txt.get())
+                    updateResult = customer_edit_booking(booking)
+                    if updateResult == True:
+                        messagebox.showinfo("Taxi Booking System",
+                                            "The booking request is updated")
+                        pendingbookingtable.delete(
+                            *pendingbookingtable.get_children())
+                        historybookingtable.delete(
+                            *historybookingtable.get_children())
+                        cusdas()
+                        history()
+                    else:
+                        messagebox.showerror("Taxi Booking System", "Error")
+                else:
+                    messagebox.showerror("Error", "Time is not Valid!")
 
         updatebtn = Button(bookingframe, command=updatebooking111, text="Update Booking",
                            bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)
         updatebtn.place(x=170, y=10)
 
         def cancelrides():
-            cancelreq = cancelreqBooking(bookingid.get())
-            if cancelreq == True:
-                msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Booking Cancelled Successful")
-                pendingbookingtable.delete(*pendingbookingtable.get_children())
-                historybookingtable.delete(*historybookingtable.get_children())
-                cusdas()
-                history()
+            if paddress_txt.get() == '' or daddress_txt1.get() == '' or date_txt.get() == '' or time_txt.get() == '':
+                messagebox.showwarning(
+                    "Taxi Booking System", "Please enter data in all the fields")
             else:
-                msg2 = messagebox.showerror(
-                    "Taxi Booking System", "Error Occurred!")
+                timeResult = timevalidation(time_txt.get())
+                if timeResult == True:
+                    cancelreq = cancelreqBooking(bookingid.get())
+                    if cancelreq == True:
+                        messagebox.showinfo(
+                            "Taxi Booking System", "Booking Cancelled Successful")
+                        pendingbookingtable.delete(
+                            *pendingbookingtable.get_children())
+                        historybookingtable.delete(
+                            *historybookingtable.get_children())
+                        cusdas()
+                        history()
+                    else:
+                        messagebox.showerror(
+                            "Taxi Booking System", "Error Occurred!")
+                else:
+                    messagebox.showerror("Error", "Time is not Valid!")
 
         deletebtn = Button(bookingframe, command=cancelrides, text="Cancel Booking",
                            bg="#4CD964", fg="white", font=sidefont, relief=RAISED, bd=5)

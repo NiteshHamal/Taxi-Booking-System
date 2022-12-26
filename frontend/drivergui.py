@@ -5,7 +5,7 @@ from backend.driverManagement import driverManage, editDri, add, driverSearch
 from middleware.driver import Driver
 
 
-class DriverCRUD():
+class DriverCRUD:
 
     def __init__(self, root):
         self.root = root
@@ -81,25 +81,22 @@ class DriverCRUD():
         passwordtxt = Entry(formframe, font=font)
         passwordtxt.place(x=470, y=70)
 
-        # statuslbl = Label(formframe, text="Payment: ", font=font)
-        # statuslbl.place(x=370, y=120)
-        #
-        # statustxt = Entry(formframe, font=font)
-        # statustxt.place(x=470, y=120)
-
         # function to add new driver ------------------------------------------------------------------
         def addDriver():
-            driver = Driver(did='', fullname=nametxt.get(), address=addresstxt.get(
-            ), email=emailtxt.get(), licenseno=licensetxt.get(), password=passwordtxt.get(), status="Active")
-            result = add(driver)
-            if result == True:
-                msg1 = messagebox.showinfo(
-                    "Taxi Booking System", "Driver Added Successfully!")
-                treeview.delete(*treeview.get_children())
-                driverValue()
+            if (nametxt.get() == '') or (emailtxt.get() == '') or (addresstxt.get() == '') or (licensetxt.get() == '') or (passwordtxt.get() == ''):
+                messagebox.showerror("Error", 'Please Fill All The Fields')
             else:
-                msg2 = messagebox.showinfo(
-                    "Taxi Booking System", "Error Occurred!")
+                driver = Driver(did='', fullname=nametxt.get(), address=addresstxt.get(
+                ), email=emailtxt.get(), licenseno=licensetxt.get(), password=passwordtxt.get(), status="Active")
+                result = add(driver)
+                if result == True:
+                    msg1 = messagebox.showinfo(
+                        "Taxi Booking System", "Driver Added Successfully!")
+                    treeview.delete(*treeview.get_children())
+                    driverValue()
+                else:
+                    msg2 = messagebox.showinfo(
+                        "Taxi Booking System", "Error Occurred!")
 
         savebtn = Button(formframe, text="  Save Record  ",
                          bg="#4CD964", font=font, command=addDriver)
@@ -107,8 +104,12 @@ class DriverCRUD():
 
         # function to edit or to update driver--------------------------------------------------------
         def editDriver():
-            driver1 = Driver(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
-                             licenseno=licensetxt.get(),  did=didtxt.get())
+            if (nametxt.get() == '') or (addresstxt.get() == '') or (emailtxt.get() == '') or (licensetxt.get() == ''):
+                messagebox.showerror(
+                    "Error", "Please Fill All The Fields Execpt Password Field")
+            else:
+                driver1 = Driver(fullname=nametxt.get(), address=addresstxt.get(), email=emailtxt.get(),
+                                 licenseno=licensetxt.get(),  did=didtxt.get())
             edriver = editDri(driver1)
             if edriver == True:
                 msg1 = messagebox.showinfo(
