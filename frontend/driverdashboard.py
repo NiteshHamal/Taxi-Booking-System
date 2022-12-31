@@ -189,6 +189,8 @@ class DriverDashboard:
         customer_name_label.place(x=10, y=30)
 
         customr_name_txt = Entry(customer_name_label, font=sidefont)
+        customr_name_txt.bind("<Key>", lambda e: "break")
+        customr_name_txt.bind("<Button-1>", lambda e: "break")
         customr_name_txt.pack()
 
         pickupadress_label = LabelFrame(
@@ -196,6 +198,8 @@ class DriverDashboard:
         pickupadress_label.place(x=310, y=30)
 
         pickupaddress_txt = Entry(pickupadress_label, font=sidefont)
+        pickupaddress_txt.bind("<Key>", lambda e: "break")
+        pickupaddress_txt.bind("<Button-1>", lambda e: "break")
         pickupaddress_txt.pack()
 
         dropadress_label = LabelFrame(
@@ -203,6 +207,8 @@ class DriverDashboard:
         dropadress_label.place(x=610, y=30)
 
         dropaddress_txt = Entry(dropadress_label, font=sidefont)
+        dropaddress_txt.bind("<Key>", lambda e: "break")
+        dropaddress_txt.bind("<Button-1>", lambda e: "break")
         dropaddress_txt.pack()
 
         pickupdate_label = LabelFrame(
@@ -210,6 +216,8 @@ class DriverDashboard:
         pickupdate_label.place(x=910, y=30)
 
         pickupdate_txt = Entry(pickupdate_label, font=sidefont)
+        pickupdate_txt.bind("<Key>", lambda e: "break")
+        pickupdate_txt.bind("<Button-1>", lambda e: "break")
         pickupdate_txt.pack()
 
         pickuptime_label = LabelFrame(
@@ -217,26 +225,35 @@ class DriverDashboard:
         pickuptime_label.place(x=10, y=150)
 
         pickuptime_txt = Entry(pickuptime_label, font=sidefont)
+        pickuptime_txt.bind("<Key>", lambda e: "break")
+        pickuptime_txt.bind("<Button-1>", lambda e: "break")
         pickuptime_txt.pack()
 
         def completefunction():
-            complete1 = Booking(bookingid=bid_txt.get(), status='Completed')
-            completetripbydriverresult = completetripbydriver(complete1)
-            driver = Driver(did=did_txt.get(), status="Active")
-            result = statusUpdate(driver)
-            if completetripbydriverresult == True:
-                messagebox.showinfo('Taxi Booking System', 'Trip is Complete')
-                upcoming_trip_table.delete(*upcoming_trip_table.get_children())
-                bookingtable()
-                switch()
-                bid_txt.delete(0, END)
-                customr_name_txt.delete(0, END)
-                pickupaddress_txt.delete(0, END)
-                pickuptime_txt.delete(0, END)
-                dropaddress_txt.delete(0, END)
-                pickupdate_txt.delete(0, END)
+            if (bid_txt.get() == ''):
+                messagebox.showwarning('Error', 'Please Fill The Fields')
             else:
-                messagebox.showerror('Taxi Booking System', 'Error Occurred!')
+                complete1 = Booking(
+                    bookingid=bid_txt.get(), status='Completed')
+                completetripbydriverresult = completetripbydriver(complete1)
+                driver = Driver(did=did_txt.get(), status="Active")
+                result = statusUpdate(driver)
+                if completetripbydriverresult == True:
+                    messagebox.showinfo(
+                        'Taxi Booking System', 'Trip is Complete')
+                    upcoming_trip_table.delete(
+                        *upcoming_trip_table.get_children())
+                    bookingtable()
+                    switch()
+                    bid_txt.delete(0, END)
+                    customr_name_txt.delete(0, END)
+                    pickupaddress_txt.delete(0, END)
+                    pickuptime_txt.delete(0, END)
+                    dropaddress_txt.delete(0, END)
+                    pickupdate_txt.delete(0, END)
+                else:
+                    messagebox.showerror(
+                        'Taxi Booking System', 'Error Occurred!')
 
         complete_booking_btn = Button(
             home_frame, text='Completed', font=sidefont, bd=4, relief=RAISED, command=completefunction)
