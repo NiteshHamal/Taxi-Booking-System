@@ -6,7 +6,8 @@ from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from backend.adminManagement import adminhistory, admin_change_password, activebookingtable720
 from backend.analyticsbackend import totalbooking, totalcustomers, totaldrivers, monthbookingcount
-from backend.bookingManagement import requestBooking1167, admin_update_booking
+from backend.bookingManagement import requestBooking1167, admin_update_booking, admincancelbooking, \
+    cancelbookingbyadmin, requestBooking11672
 from backend.driverManagement import drivertablead, statusUpdate
 from frontend import signin, customergui, drivergui
 from middleware import Global
@@ -258,9 +259,7 @@ class AdminDashboard:
                 daddress_txt1.delete(0, END)
                 date_txt.delete(0, END)
                 time_txt.delete(0, END)
-
                 itemselect11 = assigndrivertable.selection()[0]
-
                 bid_txt.insert(0, assigndrivertable.item(
                     itemselect11)['values'][0])
                 paddress_txt.insert(0, assigndrivertable.item(
@@ -280,6 +279,173 @@ class AdminDashboard:
                            font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
         assignbtn.place(x=100, y=350)
 
+        # function to open a top frame for cancel booking
+        def cancelbookingfunction():
+            root = tkinter.Toplevel()
+            root.title("Cancel Booking | Admin Dashboard")
+            frame_width = 1200
+            frame_height = 500
+            root.resizable(0, 0)
+            screen_width = root.winfo_screenwidth()
+            screen_height = root.winfo_screenheight()
+            x_cordinate = int((screen_width / 2) - (frame_width / 2))
+            y_cordinate = int((screen_height / 2) - (frame_height / 2))
+            root.geometry("{}x{}+{}+{}".format(frame_width,
+                                               frame_height, x_cordinate + 120, y_cordinate))
+
+            topframe = Frame(root, height=80, bg="#4CD964")
+            topframe.pack(side=TOP, fill=BOTH)
+
+            assgnlabel = Label(topframe, text="Cancel Requested Booking", font=(
+                'Times New Roman', 18, 'bold'))
+            assgnlabel.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+            assigndriverframe = Frame(root, height=200)
+            assigndriverframe.pack(side=TOP, fill=BOTH)
+
+            bid_frame = LabelFrame(
+                assigndriverframe, text="Booking ID", font=sidefont)
+            bid_frame.place(x=10, y=10)
+
+            bid_txt = Entry(bid_frame, font=sidefont)
+            bid_txt.bind("<Key>", lambda e: "break")
+            bid_txt.bind("<Button-1>", lambda e: "break")
+            bid_txt.pack()
+
+            paddress_frame = LabelFrame(
+                assigndriverframe, text='Pickup Address', font=sidefont)
+            paddress_frame.place(x=310, y=10)
+
+            paddress_txt = Entry(paddress_frame, font=sidefont)
+            paddress_txt.bind("<Key>", lambda e: "break")
+            paddress_txt.bind("<Button-1>", lambda e: "break")
+            paddress_txt.pack()
+
+            daddress_label = LabelFrame(
+                assigndriverframe, text="Drop Address", font=sidefont)
+            daddress_label.place(x=610, y=10)
+
+            daddress_txt1 = Entry(daddress_label, font=sidefont)
+            daddress_txt1.bind("<Key>", lambda e: "break")
+            daddress_txt1.bind("<Button-1>", lambda e: "break")
+            daddress_txt1.pack()
+
+            date_label = LabelFrame(
+                assigndriverframe, text="Pickup Date", font=sidefont)
+            date_label.place(x=10, y=120)
+
+            date_txt = Entry(date_label, font=sidefont)
+            date_txt.bind("<Key>", lambda e: "break")
+            date_txt.bind("<Button-1>", lambda e: "break")
+            date_txt.pack()
+
+            time_label = LabelFrame(
+                assigndriverframe, text="Pickup Time", font=sidefont)
+            time_label.place(x=310, y=120)
+
+            time_txt = Entry(time_label, font=sidefont)
+            time_txt.bind("<Key>", lambda e: "break")
+            time_txt.bind("<Button-1>", lambda e: "break")
+            time_txt.pack()
+
+            def clearfunction():
+                bid_txt.delete(0, END)
+                paddress_txt.delete(0, END)
+                daddress_txt1.delete(0, END)
+                date_txt.delete(0, END)
+                time_txt.delete(0, END)
+
+            clear_btn = Button(assigndriverframe,
+                               text="  Clear  ", font=sidefont, relief=RAISED, bd=5, command=clearfunction)
+            clear_btn.place(x=900, y=20)
+
+            def cancelbookingfunction():
+                cancelbookingbyadminresult = cancelbookingbyadmin(
+                    bid_txt.get())
+                if cancelbookingbyadminresult == True:
+                    messagebox.showinfo(
+                        'Taxi Booking', 'Booking Cancelled Successfully!')
+                    bid_txt.delete(0, END)
+                    paddress_txt.delete(0, END)
+                    daddress_txt1.delete(0, END)
+                    date_txt.delete(0, END)
+                    time_txt.delete(0, END)
+                    cancelbookingtable.delete(
+                        *cancelbookingtable.get_children())
+                    getvaluesincancelbookingtable()
+                    requestTable.delete(*requestTable.get_children())
+                    requesttable()
+                else:
+                    messagebox.showerror('Taxi Booking', 'Error Occurred!')
+
+            cancel_btn = Button(assigndriverframe, text="Cancel Booking",
+                                font=sidefont, relief=RAISED, bd=5, command=cancelbookingfunction)
+            cancel_btn.place(x=900, y=100)
+
+            cancelbookingtable = ttk.Treeview(root)
+            cancelbookingtable.pack(
+                side=BOTTOM, fill=BOTH, expand=TRUE, pady=(10, 0))
+            cancelbookingtable['columns'] = (
+                'bid', 'cid', 'fullname', 'paddress', 'daddress', 'pdate', 'ptime', 'status')
+            cancelbookingtable.column('#0', width=0, stretch=0)
+            cancelbookingtable.column('bid', width=0, stretch=0)
+            cancelbookingtable.column('cid', width=50, anchor=CENTER)
+            cancelbookingtable.column('fullname', width=100, anchor=CENTER)
+            cancelbookingtable.column('paddress', width=100, anchor=CENTER)
+            cancelbookingtable.column('daddress', width=100, anchor=CENTER)
+            cancelbookingtable.column('pdate', width=100, anchor=CENTER)
+            cancelbookingtable.column('ptime', width=100, anchor=CENTER)
+            cancelbookingtable.column('status', width=100, anchor=CENTER)
+
+            cancelbookingtable.heading('#0', text='', anchor=CENTER)
+            cancelbookingtable.heading('bid', text='', anchor=CENTER)
+            cancelbookingtable.heading(
+                'cid', text='Customer ID', anchor=CENTER)
+            cancelbookingtable.heading(
+                'fullname', text='Fullname', anchor=CENTER)
+            cancelbookingtable.heading(
+                'paddress', text='Pickup Address', anchor=CENTER)
+            cancelbookingtable.heading(
+                'daddress', text='Drop Address', anchor=CENTER)
+            cancelbookingtable.heading(
+                'pdate', text='Pickup Date', anchor=CENTER)
+            cancelbookingtable.heading(
+                'ptime', text='Pickup Time', anchor=CENTER)
+            cancelbookingtable.heading(
+                'status', text='Booking Status', anchor=CENTER)
+
+            def getvaluesincancelbookingtable():
+                result = admincancelbooking()
+                for row in result:
+                    cancelbookingtable.insert(parent='', index='end', values=(
+                        row[1], row[0], row[2], row[3], row[4], row[5], row[6], row[7]))
+            getvaluesincancelbookingtable()
+
+            def getvaluesfromcancelbookingtable(a):
+                bid_txt.delete(0, END)
+                paddress_txt.delete(0, END)
+                daddress_txt1.delete(0, END)
+                date_txt.delete(0, END)
+                time_txt.delete(0, END)
+                itemselect11 = cancelbookingtable.selection()[0]
+                bid_txt.insert(0, cancelbookingtable.item(
+                    itemselect11)['values'][0])
+                paddress_txt.insert(0, cancelbookingtable.item(
+                    itemselect11)['values'][3])
+                daddress_txt1.insert(
+                    0, cancelbookingtable.item(itemselect11)['values'][4])
+                date_txt.insert(0, cancelbookingtable.item(
+                    itemselect11)['values'][5])
+                time_txt.insert(0, cancelbookingtable.item(
+                    itemselect11)['values'][6])
+
+            cancelbookingtable.bind(
+                '<<TreeviewSelect>>', getvaluesfromcancelbookingtable)
+
+        cancelbookingbtn = Button(sideframe, text='Cancel Booking', font=sidefont,
+                                  bg='#e2f3f5', highlightthickness=0, borderwidth=0, command=cancelbookingfunction)
+        cancelbookingbtn.place(x=90, y=400)
+
         # function to open customer management gui
         def customermanagementgui():
             root = tkinter.Toplevel()
@@ -288,7 +454,7 @@ class AdminDashboard:
 
         customerbtn = Button(sideframe, text="Customer Management", command=customermanagementgui,
                              font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        customerbtn.place(x=70, y=400)
+        customerbtn.place(x=70, y=450)
 
         # function to open driver management gui
         def drivermanagementgui():
@@ -298,7 +464,7 @@ class AdminDashboard:
 
         driverbtn = Button(sideframe, text="Driver Management", font=sidefont,  bg='#e2f3f5',
                            highlightthickness=0, borderwidth=0, command=drivermanagementgui)
-        driverbtn.place(x=80, y=450)
+        driverbtn.place(x=80, y=500)
 
         def changepassword_gui():
             password = tkinter.Toplevel()
@@ -364,7 +530,7 @@ class AdminDashboard:
 
         passwordbtn = Button(sideframe, command=changepassword_gui, text="Change Password",
                              font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        passwordbtn.place(x=90, y=500)
+        passwordbtn.place(x=90, y=550)
 
         def logout720():
             self.main.destroy()
@@ -374,14 +540,14 @@ class AdminDashboard:
 
         logoutbtn = Button(sideframe, text="Logout", command=logout720,
                            font=sidefont,  bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        logoutbtn.place(x=120, y=550)
+        logoutbtn.place(x=120, y=600)
 
         def exit():
             sys.exit()
 
         exitbtn = Button(sideframe, text="Exit", font=sidefont, command=exit,
                          bg='#e2f3f5', highlightthickness=0, borderwidth=0)
-        exitbtn.place(x=130, y=600)
+        exitbtn.place(x=130, y=650)
 
         centerframe = Frame(self.main, height=250, bg='#ffffff')
         centerframe.pack(side=TOP, fill=BOTH)
@@ -492,7 +658,7 @@ class AdminDashboard:
         requestTable.heading('status', text='Booking Status', anchor=CENTER)
 
         def requesttable():
-            request = requestBooking1167()
+            request = requestBooking11672()
             for row in request:
                 requestTable.insert(parent='', index='end', values=(
                     row[1], row[0], row[2], row[3], row[4], row[5], row[6], row[7]))

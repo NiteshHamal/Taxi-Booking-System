@@ -122,9 +122,9 @@ def cancelreqBooking(bid):
 
 
 def requestBooking1167():
-    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
-    booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
-    WHERE  booking.status = 'Pending' """
+    sql = """    SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address,
+    booking.pickup_date, booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON 
+    booking.cid = customer.cid WHERE booking.status = 'Pending' AND booking.pickup_date >= DATE_FORMAT(CURDATE(), '%c/%e/%y')"""
     request = None
     try:
         conn = connect()
@@ -141,7 +141,7 @@ def requestBooking1167():
 
 
 def admin_update_booking(Info):
-    sql = """UPDATE booking SET status=%s, did=%s WHERE bookingid=%s"""
+    sql = """UPDATE booking SET status=%s, did=%s WHERE bookingid=%s """
     values = (Info.getStatus(), Info.getDid(), Info.getBookingid())
     updateResult = False
 
@@ -197,3 +197,60 @@ def completetripbydriver(bid):
     finally:
         del values, sql
         return completetripbydriverresult
+
+
+def admincancelbooking():
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, 
+    booking.pickup_date, booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
+    WHERE booking.status = 'Pending' AND booking.pickup_date < DATE_FORMAT(CURDATE(), '%c/%e/%y')"""
+    request = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        request = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return request
+
+
+def cancelbookingbyadmin(bookingid):
+    sql = """DELETE FROM booking WHERE bookingid=%s """
+    values = (bookingid,)
+    cancelbookingbyadminresult = False
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        cancelbookingbyadminresult = True
+    except:
+        print("Error :", sys.exc_info())
+    finally:
+        del sql
+        return cancelbookingbyadminresult
+
+
+def requestBooking11672():
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, 
+    booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
+    WHERE  booking.status = 'Pending'"""
+    request = None
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        request = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except:
+        print("Error : ", sys.exc_info())
+    finally:
+        del sql
+        return request

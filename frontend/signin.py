@@ -87,6 +87,7 @@ class TaxiLogin:
         email_frame.place(x=175, y=250)
 
         email_txt = Entry(email_frame, font=font2, relief=RAISED)
+        # email_txt.insert(0, 'nitesh0hamal@gmail.com')
         email_txt.pack()
 
         password_frame = LabelFrame(frame1, text="Password")
@@ -94,6 +95,7 @@ class TaxiLogin:
 
         password11 = Entry(password_frame,
                            font=font2, relief=RAISED, show='*')
+        # password11.insert(0, '1234')
         password11.pack()
 
         btn_signin = Button(frame1, text="Submit", font=font3,
@@ -110,8 +112,8 @@ class TaxiLogin:
         signup_lbl.place(x=200, y=200)
 
         signup_txt = Label(
-            frame2, text="Sign up here if you don't have account", bg="#4CD964", font=font2)
-        signup_txt.place(x=125, y=300)
+            frame2, text="Sign up here if you don't have account \n for customers only", bg="#4CD964", font=font2)
+        signup_txt.place(x=125, y=280)
 
         btn_signup = Button(frame2, text="SIGN UP", font=font3,
                             relief=GROOVE, command=signup, bg="#EFEFF4")
