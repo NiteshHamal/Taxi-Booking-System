@@ -270,6 +270,7 @@ class CustomerDashboard:
                                 if ecustomer == True:
                                     messagebox.showinfo(
                                         "Taxi Booking System", 'Profile Update Successfully!')
+                                    updateprofile.destroy()
                                 else:
                                     messagebox.showerror(
                                         'Taxi Booking System', 'Error Occurred!')
@@ -324,6 +325,7 @@ class CustomerDashboard:
 
             def changepassword():
                 if (newpasswordtxt.get() == '') or (confirmpasswordtxt.get() == ''):
+                    password.destroy()
                     messagebox.showerror('Error', 'Please Fill All the Fields')
                 else:
                     passwordResult = passwordvalidation(newpasswordtxt.get())
@@ -334,9 +336,9 @@ class CustomerDashboard:
                             newpassword = newpasswordtxt.get()
                             confirmpassword = confirmpasswordtxt.get()
                             if newpassword == confirmpassword:
-                                password = Customer(
+                                password720 = Customer(
                                     cid=cid_txt.get(), password=confirmpassword)
-                                result = customer_change_password(password)
+                                result = customer_change_password(password720)
                                 if result == True:
                                     messagebox.showinfo(
                                         "TBS", "The password is changed successfully")
@@ -348,9 +350,11 @@ class CustomerDashboard:
                                     messagebox.showerror(
                                         "TBS", "Error Occurred!")
                             else:
+                                password.destroy()
                                 messagebox.showwarning(
                                     "TBS", "The new password and confirm password does not matched!")
                     else:
+                        password.destroy()
                         messagebox.showerror(
                             'Error', 'Invalid password(Minimum eight characters-at least one uppercase,one lowercase, one number and one special character)')
 
@@ -403,7 +407,7 @@ class CustomerDashboard:
         date_label.place(x=50, y=150)
 
         dt = date.today()
-        date_txt = DateEntry(date_label, font=sidefont, width=19, mindate=dt)
+        date_txt = DateEntry(date_label, font=sidefont, width=19, mindate=dt, date_pattern='yyyy-MM-dd')
         date_txt.pack()
 
         time_label = LabelFrame(formframe, text="Pickup Time", font=sidefont)
@@ -621,8 +625,3 @@ class CustomerDashboard:
         style.map("Treeview.Heading",
                   )
 
-
-if __name__ == '__main__':
-    root = Tk()
-    CustomerDashboard(root)
-    root.mainloop()

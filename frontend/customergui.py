@@ -222,7 +222,3 @@ class CustomerCRUD:
         treeview.bind('<<TreeviewSelect>>', selectcustomertable)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    CustomerCRUD(root)
-    root.mainloop()

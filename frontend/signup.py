@@ -133,8 +133,3 @@ class Registration:
             "H:\College\Sem-2\python assignment\Taxi Booking System\image\signup.png"))
         taxi_image.create_image(10, 10, anchor=NW, image=self.root.image)
 
-
-if __name__ == '__main__':
-    root = Tk()
-    Registration(root)
-    root.mainloop()

@@ -121,8 +121,3 @@ class TaxiLogin:
 
         frame2.place(x=775, y=100)
 
-
-if __name__ == '__main__':
-    root = Tk()
-    TaxiLogin(root)
-    root.mainloop()

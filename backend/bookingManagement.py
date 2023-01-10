@@ -1,5 +1,4 @@
 from backend.connection import connect
-from middleware.booking import Booking
 import sys
 
 
@@ -122,9 +121,9 @@ def cancelreqBooking(bid):
 
 
 def requestBooking1167():
-    sql = """    SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address,
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address,
     booking.pickup_date, booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON 
-    booking.cid = customer.cid WHERE booking.status = 'Pending' AND booking.pickup_date >= DATE_FORMAT(CURDATE(), '%c/%e/%y')"""
+    booking.cid = customer.cid WHERE booking.status = 'Pending' AND booking.pickup_date >= CURDATE()"""
     request = None
     try:
         conn = connect()
@@ -200,9 +199,7 @@ def completetripbydriver(bid):
 
 
 def admincancelbooking():
-    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, 
-    booking.pickup_date, booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid 
-    WHERE booking.status = 'Pending' AND booking.pickup_date < DATE_FORMAT(CURDATE(), '%c/%e/%y')"""
+    sql = """SELECT booking.cid, booking.bookingid, customer.fullname, booking.pickup_address, booking.drop_address, booking.pickup_date, booking.pickup_time, booking.status FROM booking LEFT JOIN customer ON booking.cid = customer.cid WHERE booking.status = 'Pending' AND booking.pickup_date < CURDATE()"""
     request = None
     try:
         conn = connect()

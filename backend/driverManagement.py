@@ -1,6 +1,5 @@
 from backend.connection import connect
 import sys
-from middleware.driver import Driver
 
 
 def add(driverInfo):

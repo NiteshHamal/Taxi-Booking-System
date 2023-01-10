@@ -212,7 +212,3 @@ class DriverCRUD:
         treeview.bind('<<TreeviewSelect>>', selectdriverTable)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    DriverCRUD(root)
-    root.mainloop()

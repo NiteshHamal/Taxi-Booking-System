@@ -1,7 +1,5 @@
 import sys
 from backend.connection import connect
-from middleware.driver import Driver
-from middleware.customer import Customer
 
 
 def login(customerInfo):

@@ -383,7 +383,3 @@ class DriverDashboard:
         switch()
 
 
-if __name__ == '__main__':
-    root = Tk()
-    DriverDashboard(root)
-    root.mainloop()

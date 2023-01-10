@@ -185,30 +185,32 @@ class AdminDashboard:
 
             def confirm_booking():
                 if (bid_txt.get() == '') or (paddress_txt.get() == '') or (daddress_txt1.get() == '') or (date_txt.get() == '') or (time_txt.get() == ''):
-                    messagebox.showerror("Error", "Please Fill All Field")
-                if driver_txt.get() == '':
-                    messagebox.showwarning("TBS", "Please enter driver ID")
                     root.destroy()
+                    messagebox.showerror("Error", "Please Fill All Field")
                 else:
-                    booking = Booking(bookingid=bid_txt.get(),
-                                      did=driver_txt.get(), status='Confirmed')
-                    updateResult = admin_update_booking(booking)
-                    driver = Driver(did=driver_txt.get(), status="Inactive")
-                    result = statusUpdate(driver)
-                    driver_txt.delete(0, END)
-                    if updateResult == True:
-                        messagebox.showinfo(
-                            "TBS", "The driver is assigned successfully")
-                        requestTable.delete(*requestTable.get_children())
-                        requesttable()
-                        historytable.delete(*historytable.get_children())
-                        driverValue()
-                        activebookingtable.delete(
-                            *activebookingtable.get_children())
-                        activebooking123()
+                    if driver_txt.get() == '':
                         root.destroy()
+                        messagebox.showwarning("TBS", "Please enter driver ID")
                     else:
-                        messagebox.showerror("TBS", "Error")
+                        booking = Booking(bookingid=bid_txt.get(),
+                                          did=driver_txt.get(), status='Confirmed')
+                        updateResult = admin_update_booking(booking)
+                        driver = Driver(did=driver_txt.get(), status="Inactive")
+                        result = statusUpdate(driver)
+                        driver_txt.delete(0, END)
+                        if updateResult == True:
+                            root.destroy()
+                            requestTable.delete(*requestTable.get_children())
+                            requesttable()
+                            historytable.delete(*historytable.get_children())
+                            driverValue()
+                            activebookingtable.delete(
+                                *activebookingtable.get_children())
+                            activebooking123()
+                            messagebox.showinfo(
+                                "TBS", "The driver is assigned successfully")
+                        else:
+                            messagebox.showerror("TBS", "Error Occurred!")
 
             confirm_btn = Button(assigndriverframe, text="Confirm Booking",
                                  command=confirm_booking, font=sidefont, relief=RAISED, bd=5)
@@ -363,6 +365,7 @@ class AdminDashboard:
                 cancelbookingbyadminresult = cancelbookingbyadmin(
                     bid_txt.get())
                 if cancelbookingbyadminresult == True:
+                    root.destroy()
                     messagebox.showinfo(
                         'Taxi Booking', 'Booking Cancelled Successfully!')
                     bid_txt.delete(0, END)
@@ -723,8 +726,3 @@ class AdminDashboard:
                     row[0], row[1], row[2], row[3], row[4], row[5]))
         driverValue()
 
-
-if __name__ == '__main__':
-    main = Tk()
-    AdminDashboard(main)
-    main.mainloop()

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2022 at 10:48 AM
+-- Generation Time: Jan 10, 2023 at 07:49 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -35,6 +35,40 @@ CREATE TABLE `admin` (
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`adminid`, `fullname`, `address`, `email`, `password`) VALUES
+(1, 'Nitesh Hamal', 'Jhapa', 'nitesh0hamal@gmail.com', '1234'),
+(2, 'Admin Name', '\r\nAddress', 'admin@gmail.com', 'Admin@1234');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `bookingid` int(10) NOT NULL,
+  `pickup_address` varchar(100) NOT NULL,
+  `drop_address` varchar(100) NOT NULL,
+  `pickup_date` varchar(100) NOT NULL,
+  `pickup_time` varchar(100) NOT NULL,
+  `status` varchar(100) DEFAULT NULL,
+  `cid` int(10) DEFAULT NULL,
+  `did` int(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`bookingid`, `pickup_address`, `drop_address`, `pickup_date`, `pickup_time`, `status`, `cid`, `did`) VALUES
+(6, 'jhapa', 'biratnagar', '2023-01-11', '2', 'Completed', 3, 1),
+(9, 'ktm', 'butwal', '2023-01-19', '05:55 am', 'Completed', 3, 2),
+(10, 'Jhapa', 'Pokhara', '2023-01-10', '03:30 PM', 'Completed', 6, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -46,7 +80,7 @@ CREATE TABLE `customer` (
   `fullname` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `number` bigint(10) NOT NULL,
+  `number` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `payment` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -56,9 +90,10 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`cid`, `fullname`, `address`, `email`, `number`, `password`, `payment`) VALUES
-(1, 'Hancie Phago', 'Ktm', 'hancie@gmail.com', 9825915122, '720', 'cash'),
-(2, 'Nitesh Hamal', 'Ktm', 'nitesh@gmail.com', 9813371345, 'hello', 'cash'),
-(3, 'Ajaya Timsina', 'Ktm', 'ajaya@gmail.com', 9855036540, 'nott', 'cash');
+(3, 'Nikita Thapa', 'Bhaktapur', 'nikita@gmail.com', '+977 9865656543', 'Nikita@1234', 'Cash'),
+(4, 'Ajaya Timsina', 'Jhapa', 'ajaya@gmail.com', '+977 981233456', 'Ajaya@123', 'Cash'),
+(6, 'Hancie Phago', 'Jhapa', 'hancie@gmail.com', '+977 9825915122', 'Hancie@123', 'Online'),
+(8, 'Nitesh Hamal', 'Jhapa', 'nitesh@gmail.com', '+977 9813371345', 'Nitesh@720', 'Online');
 
 -- --------------------------------------------------------
 
@@ -72,9 +107,17 @@ CREATE TABLE `driver` (
   `address` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `licenseno` varchar(100) NOT NULL,
-  `status` varchar(100) DEFAULT NULL,
+  `status` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `driver`
+--
+
+INSERT INTO `driver` (`did`, `fullname`, `address`, `email`, `licenseno`, `status`, `password`) VALUES
+(1, 'Aveshesh Kc', 'Sukedhara', 'aveshesh@gmail.com', '88783736373637637', 'Active', '1234'),
+(2, 'Driver Name', 'Address', 'driver@gmail.com', '1111-1111-2w2w-33e3', 'Active', 'Driver@1234');
 
 --
 -- Indexes for dumped tables
@@ -86,6 +129,14 @@ CREATE TABLE `driver` (
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`adminid`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`bookingid`),
+  ADD KEY `did` (`did`),
+  ADD KEY `cid` (`cid`);
 
 --
 -- Indexes for table `customer`
@@ -111,19 +162,36 @@ ALTER TABLE `driver`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `adminid` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `adminid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `bookingid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `cid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `driver`
 --
 ALTER TABLE `driver`
-  MODIFY `did` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `did` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `customer` (`cid`),
+  ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`did`) REFERENCES `driver` (`did`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

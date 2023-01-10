@@ -37,8 +37,6 @@ def totalcustomers():
 
 
 def totaldrivers():
-
-    conn = None
     sql = """SELECT COUNT(did) from driver"""
     driverresult = None
     try:
@@ -48,19 +46,15 @@ def totaldrivers():
         driverresult = cursor.fetchall()
         cursor.close()
         conn.close()
-
     except:
         print("Error", sys.exc_info())
-
     finally:
         del sql, conn
         return driverresult
 
 
 def monthbookingcount():
-
-    conn = None
-    sql = """select count(bookingid) from booking where pickup_date=MONTH(NOW()) and YEAR(NOW())"""
+    sql = """select count(bookingid) from booking where pickup_date=YEAR(NOW()) and MONTH(NOW())"""
     monthresult = None
     try:
         conn = connect()
@@ -69,10 +63,8 @@ def monthbookingcount():
         monthresult = cursor.fetchall()
         cursor.close()
         conn.close()
-
     except:
         print("Error", sys.exc_info())
-
     finally:
         del sql, conn
         return monthresult
